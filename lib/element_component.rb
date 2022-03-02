@@ -3,13 +3,13 @@
 require 'simplecov'
 SimpleCov.start
 
-require_relative "element_component/version"
-require_relative "element_component/element"
-require_relative "element_component/form/input"
-require_relative "element_component/form/form"
+require_relative 'element_component/version'
+require_relative 'element_component/element'
+require_relative 'element_component/form/input'
+require_relative 'element_component/form/form'
 
 # Bulma CSS
-require_relative "element_component/bulma/breadcrumb"
+require_relative 'element_component/bulma/breadcrumb'
 
 module ElementComponent
   class Error < StandardError; end

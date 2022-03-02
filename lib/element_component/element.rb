@@ -3,7 +3,8 @@ module ElementComponent
     attr_reader :element, :contents, :attributes
 
     def initialize(element, closing_tag: true)
-      @element, @closing_tag = element, closing_tag
+      @element = element
+      @closing_tag = closing_tag
 
       reset_attributes!
       reset_contents!
@@ -13,7 +14,7 @@ module ElementComponent
       reset_contents! if reset
       @contents.push(content)
 
-      return content
+      content
     end
 
     def reset_contents!
@@ -27,7 +28,7 @@ module ElementComponent
         return @attributes[attribute.to_sym].push(value)
       end
 
-      return @attributes[attribute.to_sym] = [value]
+      @attributes[attribute.to_sym] = [value]
     end
 
     # TODO: add test
@@ -60,7 +61,7 @@ module ElementComponent
         acc << " #{attr[0].to_sym}=\"#{attr[1].join(' ')}\""
       end
 
-      partial << ">"
+      partial << '>'
     end
 
     def close_tag
