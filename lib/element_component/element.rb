@@ -24,15 +24,20 @@ module ElementComponent
     def add_attribute(attribute, value, reset: false)
       reset_attributes! if reset
 
-      if @attributes.key?(attribute.to_sym)
-        return @attributes[attribute.to_sym].push(value)
-      end
+      attribute = attribute.to_sym
+      return @attributes[attribute].push(value) if @attributes.key?(attribute)
 
-      @attributes[attribute.to_sym] = [value]
+      @attributes[attribute] = [value]
+    end
+
+    def remove_attribute!(attribute)
+      attribute = attribute.to_sym
+      @attributes = @attributes.except(attribute)
     end
 
     # TODO: add test
     def remove_attribute_value(attribute, value)
+      attribute = attribute.to_sym
       attributes[attribute].delete(value)
     end
 
@@ -43,9 +48,9 @@ module ElementComponent
     def render
       partial = open_tag
       @contents.each do |content|
-        partial << (content.kind_of?(Element) ? content.render : content.to_s)
+        partial << (content.is_a?(Element) ? content.render : content.to_s)
       end
-      partial << close_tag
+      partial << close_tag if @closing_tag
     end
 
     def to_file(file_name, directory, format: 'html')
@@ -65,8 +70,6 @@ module ElementComponent
     end
 
     def close_tag
-      return '' unless @closing_tag
-
       "</#{@element}>"
     end
   end

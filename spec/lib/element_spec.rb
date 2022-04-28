@@ -2,7 +2,7 @@ RSpec.describe ElementComponent::Element do
   subject { ElementComponent::Element.new('p') }
 
   describe 'Create empty element' do
-    it { expect(subject.element).to eq('p') } 
+    it { expect(subject.element).to eq('p') }
     it { expect(subject.contents).to eq([]) }
     it { expect(subject.attributes).to eq({}) }
     it { expect(subject.render).to eq('<p></p>') }
@@ -30,7 +30,7 @@ RSpec.describe ElementComponent::Element do
 
     context 'When content have type Element' do
       before { subject.add_content(ElementComponent::Element.new('h1')) }
-      
+
       it { expect(subject.contents.count).to eq(2) }
       it { expect(subject.contents.class).to eq(Array) }
       it { expect(subject.contents.first).to eq('content one') }
@@ -50,9 +50,9 @@ RSpec.describe ElementComponent::Element do
     before { subject.add_attribute(:class, 'margin') }
 
     context 'Add new attribute' do
-      it { expect(subject.attributes.has_key?(:class)).to be_truthy } 
-      it { expect(subject.attributes).to eq({class: ['margin']}) } 
-      it { expect(subject.render).to eq("<p class=\"margin\"></p>") }
+      it { expect(subject.attributes.has_key?(:class)).to be_truthy }
+      it { expect(subject.attributes).to eq({class: ['margin']}) }
+      it { expect(subject.render).to eq('<p class="margin"></p>') }
     end
 
     context 'Add more value to the some attribute' do
@@ -60,15 +60,15 @@ RSpec.describe ElementComponent::Element do
 
       it { expect(subject.attributes.has_key?(:class)).to be_truthy }
       it { expect(subject.attributes).to eq({class: ['margin', 'color']}) }
-      it { expect(subject.render).to eq("<p class=\"margin color\"></p>") }
+      it { expect(subject.render).to eq('<p class="margin color"></p>') }
     end
 
     context 'Reset attributes and add new value' do
       before { subject.add_attribute(:class, 'padding', reset: true) }
 
-      it { expect(subject.attributes.has_key?(:class)).to be_truthy } 
-      it { expect(subject.attributes).to eq({class: ['padding']}) } 
-      it { expect(subject.render).to eq("<p class=\"padding\"></p>") }
+      it { expect(subject.attributes.has_key?(:class)).to be_truthy }
+      it { expect(subject.attributes).to eq({class: ['padding']}) }
+      it { expect(subject.render).to eq('<p class="padding"></p>') }
     end
   end
 end

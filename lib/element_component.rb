@@ -1,7 +1,10 @@
 # frozen_string_literal: true
-
+#
 require 'simplecov'
-SimpleCov.start
+
+SimpleCov.start do
+  add_filter '/spec/'
+end
 
 require_relative 'element_component/version'
 require_relative 'element_component/element'
