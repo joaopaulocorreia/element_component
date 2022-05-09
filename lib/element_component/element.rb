@@ -47,10 +47,13 @@ module ElementComponent
 
     def render
       partial = open_tag
+
       @contents.each do |content|
         partial << (content.is_a?(Element) ? content.render : content.to_s)
       end
+
       partial << close_tag if @closing_tag
+      partial
     end
 
     def to_file(file_name, directory, format: 'html')

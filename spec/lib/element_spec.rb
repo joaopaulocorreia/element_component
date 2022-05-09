@@ -51,7 +51,7 @@ RSpec.describe ElementComponent::Element do
 
     context 'Add new attribute' do
       it { expect(subject.attributes.has_key?(:class)).to be_truthy }
-      it { expect(subject.attributes).to eq({class: ['margin']}) }
+      it { expect(subject.attributes).to eq({ class: ['margin'] }) }
       it { expect(subject.render).to eq('<p class="margin"></p>') }
     end
 
@@ -59,7 +59,7 @@ RSpec.describe ElementComponent::Element do
       before { subject.add_attribute(:class, 'color') }
 
       it { expect(subject.attributes.has_key?(:class)).to be_truthy }
-      it { expect(subject.attributes).to eq({class: ['margin', 'color']}) }
+      it { expect(subject.attributes).to eq({ class: %w[margin color] }) }
       it { expect(subject.render).to eq('<p class="margin color"></p>') }
     end
 
@@ -67,7 +67,7 @@ RSpec.describe ElementComponent::Element do
       before { subject.add_attribute(:class, 'padding', reset: true) }
 
       it { expect(subject.attributes.has_key?(:class)).to be_truthy }
-      it { expect(subject.attributes).to eq({class: ['padding']}) }
+      it { expect(subject.attributes).to eq({ class: ['padding'] }) }
       it { expect(subject.render).to eq('<p class="padding"></p>') }
     end
   end
