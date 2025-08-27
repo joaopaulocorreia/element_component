@@ -19,7 +19,7 @@ gem install element_component
 ## Usage
 
 ```ruby
-maker = El::Maker.new
+maker = ElementComponent::Core::Maker.new
 form = maker.form(attribute: { class: 'has-background-color', method: 'GET', action: '/', turbo: false }) do |form|
   input = maker.input(attribute: { type: 'text', name: 'email', value: nil })
   form.add_content input
