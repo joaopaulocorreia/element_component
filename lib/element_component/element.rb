@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ElementComponent
   class Element
     attr_reader :element, :attributes, :contents, :html
@@ -7,6 +5,7 @@ module ElementComponent
     def initialize(element, closing_tag: true, **attribute)
       @element = element
       @closing_tag = closing_tag
+      @html = ""
 
       add_attribute!(attribute)
       reset_contents!
@@ -83,29 +82,12 @@ module ElementComponent
 
     private
 
-    def self.before_render(&block)
-      define_method('before_render') do
-        block.call
-      end
-    end
-
-    def self.after_render(&block)
-      define_method('after_render') do |html|
-        block.call html
-      end
-    end
-
-    def self.around_render(&block)
-      define_method('around_render') do |html|
-        block.call html
-      end
-    end
-
     def build
-      @html = "<#{@element}"
+      @html << "<#{@element}"
       @html << (mount_attributes.empty? ? ">" : " #{mount_attributes}>")
       @html << mount_content
       @html << "</#{@element}>" if @closing_tag
+      @html
     end
 
     def mount_attributes

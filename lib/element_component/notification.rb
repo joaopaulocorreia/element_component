@@ -2,12 +2,6 @@ module ElementComponent
   class Notification < Element
     attr_reader :icon, :title, :message
 
-    before_render { puts 'BEFORE RENDER' }
-    after_render { |html| puts html; puts 'AFTER RENDER' }
-    around_render do |html|
-      
-    end
-
     VARIANTS = [ :danger, :success ]
 
     def initialize
@@ -35,6 +29,14 @@ module ElementComponent
         set_icon('fa-solid fa-plus')
         add_attribute class: 'notification-danger'
       end
+    end
+
+    def around_render
+      puts 'BEFORE_RENDER'
+      html = yield
+      puts html
+      html << 'HTML FINAL'
+      puts 'AFTER_RENDER'
     end
 
     private
