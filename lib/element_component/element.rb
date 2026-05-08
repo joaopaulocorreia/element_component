@@ -64,7 +64,7 @@ module ElementComponent
       @attributes = {}
     end
 
-    def element(*args, **kargs) = Element.new(*args, **kargs)
+    def new_element(*args, **kargs) = Element.new(*args, **kargs)
 
     def render
       before_render if respond_to? 'before_render'

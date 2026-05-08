@@ -1,6 +1,6 @@
 # ElementComponent
 
-HTML builder
+A lightweight and flexible HTML builder for Ruby. `ElementComponent` provides a simple, object-oriented way to construct HTML structures programmatically, allowing for dynamic attribute management and content nesting.
 
 ## Installation
 
@@ -18,26 +18,66 @@ gem install element_component
 
 ## Usage
 
+### Basic Usage
+
+Create a simple element and render it to HTML:
+
 ```ruby
-maker = ElementComponent::Core::Maker.new
-form = maker.form(attribute: { class: 'has-background-color', method: 'GET', action: '/', turbo: false }) do |form|
-  input = maker.input(attribute: { type: 'text', name: 'email', value: nil })
-  form.add_content input
-
-  button = maker.button(content: 'Save', attribute: { type: 'submit'})
-  div    = maker.div(content: button, attribute: { class: 'buttons' })
-
-  form.add_content div
-end
-
-puts form.build
+p = ElementComponent::Element.new("p", class: "text-bold")
+p.add_content("Hello, World!")
+puts p.render
+# => <p class="text-bold">Hello, World!</p>
 ```
 
-## Output
+### Nesting Elements
 
-```html
-<form class="has-background-color" method="GET" action="/" turbo="false"><input type="text" name="email" value=""></input><div class="buttons"><button type="submit">Save</button></div></form>
+You can nest elements by adding another `ElementComponent::Element` instance as content:
+
+```ruby
+div = ElementComponent::Element.new("div", class: "container")
+h1  = ElementComponent::Element.new("h1")
+h1.add_content("Welcome")
+
+div.add_content(h1)
+div.add_content("This is a simple HTML builder.")
+
+puts div.render
+# => <div class="container"><h1>Welcome</h1>This is a simple HTML builder.</div>
 ```
+
+### Attribute Management
+
+`ElementComponent` allows for easy manipulation of HTML attributes:
+
+```ruby
+btn = ElementComponent::Element.new("button", class: "btn", type: "button")
+
+# Add more values to an attribute (e.g., adding another class)
+btn.add_attribute(class: "btn-primary")
+
+# Reset attributes and set new ones
+btn.add_attribute!(id: "submit-btn", type: "submit")
+
+# Remove an attribute
+btn.remove_attribute(:type)
+
+# Remove a specific value from an attribute
+btn.remove_attribute_value(:class, "btn-primary")
+```
+
+### Self-Closing Tags
+
+You can specify if an element should have a closing tag:
+
+```ruby
+img = ElementComponent::Element.new("img", closing_tag: false, src: "image.png", alt: "Logo")
+puts img.render
+# => <img src="image.png" alt="Logo">
+```
+
+### Rendering Hooks
+
+`ElementComponent` supports `before_render`, `after_render`, and `around_render` hooks if implemented in a subclass or by extending an instance.
 
 ## Development
 
@@ -45,10 +85,12 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-## TODO
-[ ] - Cache
-[ ] - Bulma components
-[ ] - Bootstrap components
+## Roadmap
+
+- [ ] Support for Caching
+- [ ] Pre-built Bulma components
+- [ ] Pre-built Bootstrap components
+- [ ] Enhanced DSL for nested structures
 
 ## Contributing
 

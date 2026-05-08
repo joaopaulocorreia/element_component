@@ -1,11 +1,22 @@
-RSpec.describe ElementComponent::Core::Element do
-  subject { ElementComponent::Core::Element.new("p") }
+RSpec.describe ElementComponent::Element do
+  subject { ElementComponent::Element.new("p") }
 
   describe "Create empty element" do
-    it { expect(subject.element).to eq("p") }
-    it { expect(subject.contents).to eq([]) }
-    it { expect(subject.attributes).to eq({}) }
-    it { expect(subject.build).to eq("<p></p>") }
+    it "has the correct element name" do
+      expect(subject.element).to eq("p")
+    end
+
+    it "has empty contents" do
+      expect(subject.contents).to eq([])
+    end
+
+    it "has empty attributes" do
+      expect(subject.attributes).to eq({})
+    end
+
+    it "renders an empty element" do
+      expect(subject.render).to eq("<p></p>")
+    end
   end
 
   describe "Add content to element" do
@@ -15,7 +26,7 @@ RSpec.describe ElementComponent::Core::Element do
       it { expect(subject.contents.count).to eq(1) }
       it { expect(subject.contents.class).to eq(Array) }
       it { expect(subject.contents.first).to eq("content one") }
-      it { expect(subject.build).to eq("<p>content one</p>") }
+      it { expect(subject.render).to eq("<p>content one</p>") }
     end
 
     context "Two contents" do
@@ -25,21 +36,21 @@ RSpec.describe ElementComponent::Core::Element do
       it { expect(subject.contents.class).to eq(Array) }
       it { expect(subject.contents.first).to eq("content one") }
       it { expect(subject.contents.last).to eq("content two") }
-      it { expect(subject.build).to eq("<p>content onecontent two</p>") }
+      it { expect(subject.render).to eq("<p>content onecontent two</p>") }
     end
 
     context "When content have type Element" do
-      before { subject.add_content(ElementComponent::Core::Element.new("h1")) }
+      before { subject.add_content(ElementComponent::Element.new("h1")) }
 
       it { expect(subject.contents.count).to eq(2) }
       it { expect(subject.contents.class).to eq(Array) }
       it { expect(subject.contents.first).to eq("content one") }
-      it { expect(subject.contents.last.class).to eq(ElementComponent::Core::Element) }
-      it { expect(subject.build).to eq("<p>content one<h1></h1></p>") }
+      it { expect(subject.contents.last.class).to eq(ElementComponent::Element) }
+      it { expect(subject.render).to eq("<p>content one<h1></h1></p>") }
     end
 
     context "Reset contents and add new value" do
-      before { subject.add_content("new content", reset: true) }
+      before { subject.add_content!("new content") }
 
       it { expect(subject.contents.count).to eq(1) }
       it { expect(subject.contents).to eq(["new content"]) }
@@ -47,28 +58,28 @@ RSpec.describe ElementComponent::Core::Element do
   end
 
   describe "Add attribute to element" do
-    before { subject.add_attribute(:class, "margin") }
+    before { subject.add_attribute(class: "margin") }
 
     context "Add new attribute" do
       it { expect(subject.attributes.key?(:class)).to be_truthy }
       it { expect(subject.attributes).to eq({ class: ["margin"] }) }
-      it { expect(subject.build).to eq('<p class="margin"></p>') }
+      it { expect(subject.render).to eq('<p class="margin"></p>') }
     end
 
     context "Add more value to the some attribute" do
-      before { subject.add_attribute(:class, "color") }
+      before { subject.add_attribute(class: "color") }
 
       it { expect(subject.attributes.key?(:class)).to be_truthy }
       it { expect(subject.attributes).to eq({ class: %w[margin color] }) }
-      it { expect(subject.build).to eq('<p class="margin color"></p>') }
+      it { expect(subject.render).to eq('<p class="margin color"></p>') }
     end
 
     context "Reset attributes and add new value" do
-      before { subject.add_attribute(:class, "padding", reset: true) }
+      before { subject.add_attribute!(class: "padding") }
 
       it { expect(subject.attributes.key?(:class)).to be_truthy }
       it { expect(subject.attributes).to eq({ class: ["padding"] }) }
-      it { expect(subject.build).to eq('<p class="padding"></p>') }
+      it { expect(subject.render).to eq('<p class="padding"></p>') }
     end
   end
 end
