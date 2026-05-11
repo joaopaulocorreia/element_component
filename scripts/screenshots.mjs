@@ -28,6 +28,10 @@ const examples = [
   "progress_example.rb",
   "spinner_example.rb",
   "table_example.rb",
+  "modal_example.rb",
+  "carousel_example.rb",
+  "dropdown_example.rb",
+  "navbar_example.rb",
 ];
 
 /* Highlight Ruby code server-side */

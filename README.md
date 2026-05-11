@@ -7,7 +7,7 @@ A lightweight and flexible HTML builder for Ruby. `ElementComponent` provides a 
 - **Object-Oriented HTML Construction** — Build HTML trees using Ruby objects with dynamic attribute management
 - **Block DSL** — Nest content inline with `instance_eval`-based blocks and the `new_element` helper
 - **Rendering Hooks** — `before_render`, `after_render`, and `around_render` callbacks for dynamic content
-- **13 Bootstrap 5 Components** — Ready-to-use Alert, Badge, Breadcrumb, Button, ButtonGroup, Card, CloseButton, ListGroup, Nav, Pagination, Progress, Spinner, and Table
+- **17 Bootstrap 5 Components** — Ready-to-use Alert, Badge, Breadcrumb, Button, ButtonGroup, Card, Carousel, CloseButton, Dropdown, ListGroup, Modal, Nav, Navbar, Pagination, Progress, Spinner, and Table
 - **Chained API** — All `add_*` methods return `self` for method chaining
 - **Self-Closing Tags** — Support for void elements like `<img>`, `<input>`, `<br>`
 
@@ -134,9 +134,13 @@ All components live under `ElementComponent::Components` and support the block D
 | Button | `Button` | `<button>` / `<a>` | `variant`, `outline`, `size`, `href` |
 | ButtonGroup | `ButtonGroup` | `<div>` | `size`, `vertical` |
 | Card | `Card` | `<div>` | Sub-components: Header, Body, Footer, Title, Text, Image |
+| Carousel | `Carousel` | `<div>` | `fade`, `indicators`, `controls`; `CarouselItem`, `CarouselCaption` |
 | CloseButton | `CloseButton` | `<button>` (self-closing) | `disabled` |
+| Dropdown | `Dropdown` | `<div>` | `direction`; `DropdownMenu`, `DropdownItem`, `DropdownDivider`, `DropdownHeader` |
 | ListGroup | `ListGroup` | `<ul>` | `flush`, `numbered`; `ListGroupItem` (`variant`, `active`, `disabled`, `href`) |
+| Modal | `Modal` | `<div>` | `fade`, `static`, `scrollable`, `centered`, `size`; `ModalContent`, `ModalHeader`, `ModalBody`, `ModalFooter` |
 | Nav | `Nav` | `<ul>` | `type` (tabs/pills/underline), `fill`, `justified`, `vertical` |
+| Navbar | `Navbar` | `<nav>` | `expand`, `theme`, `background`, `fixed`, `sticky`; `NavbarBrand`, `NavbarNav`, `NavbarToggler` |
 | Pagination | `Pagination` | `<nav>` → `<ul>` | `size`; `PageItem` (`active`, `disabled`) |
 | Progress | `Progress` | `<div>` | `ProgressBar` (`value`, `variant`, `striped`, `animated`) |
 | Spinner | `Spinner` | `<div>` | `type` (border/grow), `variant` |
@@ -361,6 +365,129 @@ disabled = ElementComponent::Components::CloseButton.new(disabled: true)
 # => <button class="btn-close" type="button" aria-label="Close" disabled>
 ```
 
+### Modal
+
+<img src="images/modal.png" alt="Modal component screenshot" width="700">
+
+```ruby
+modal = ElementComponent::Components::Modal.new(id: "exampleModal") do
+  add_content(ElementComponent::Components::ModalContent.new do
+    add_content(ElementComponent::Components::ModalHeader.new do
+      add_content(ElementComponent::Components::ModalTitle.new { add_content("Modal title") })
+    end)
+    add_content(ElementComponent::Components::ModalBody.new { add_content("Modal body text.") })
+    add_content(ElementComponent::Components::ModalFooter.new do
+      add_content(ElementComponent::Components::Button.new(variant: :secondary) { add_content("Close") })
+      add_content(ElementComponent::Components::Button.new(variant: :primary) { add_content("Save") })
+    end)
+  end)
+end
+```
+
+**Options**: `fade`, `static`, `scrollable`, `centered`, `size` (sm/lg/xl), `fullscreen`
+
+**Sub-components**:
+
+| Class | Tag | CSS Class |
+|---|---|---|
+| `ModalDialog` | `<div>` | `.modal-dialog` |
+| `ModalContent` | `<div>` | `.modal-content` |
+| `ModalHeader` | `<div>` | `.modal-header` |
+| `ModalTitle` | `<h5>` | `.modal-title` |
+| `ModalBody` | `<div>` | `.modal-body` |
+| `ModalFooter` | `<div>` | `.modal-footer` |
+
+### Carousel
+
+<img src="images/carousel.png" alt="Carousel component screenshot" width="700">
+
+```ruby
+carousel = ElementComponent::Components::Carousel.new(id: "slides") do
+  add_content(ElementComponent::Components::CarouselItem.new(active: true) do
+    add_content(%(<img src="slide1.jpg" class="d-block w-100" alt="...">))
+  end)
+  add_content(ElementComponent::Components::CarouselItem.new do
+    add_content(%(<img src="slide2.jpg" class="d-block w-100" alt="...">))
+  end)
+end
+```
+
+**Options**: `fade` (crossfade), `indicators`, `controls`; indicators and navigation controls are auto-generated
+
+**Sub-components**:
+
+| Class | Tag | CSS Class |
+|---|---|---|
+| `CarouselItem` | `<div>` | `.carousel-item` |
+| `CarouselCaption` | `<div>` | `.carousel-caption` |
+
+### Dropdown
+
+<img src="images/dropdown.png" alt="Dropdown component screenshot" width="700">
+
+```ruby
+dropdown = ElementComponent::Components::Dropdown.new do
+  add_content(
+    ElementComponent::Element.new("button",
+      class: "btn btn-secondary dropdown-toggle",
+      type: "button",
+      "data-bs-toggle": "dropdown",
+      "aria-expanded": "false") { add_content("Dropdown") }
+  )
+  add_content(
+    ElementComponent::Components::DropdownMenu.new do
+      add_content(ElementComponent::Components::DropdownItem.new { add_content("Action") })
+      add_content(ElementComponent::Components::DropdownItem.new(active: true) { add_content("Active") })
+      add_content(ElementComponent::Components::DropdownDivider.new)
+      add_content(ElementComponent::Components::DropdownItem.new(disabled: true) { add_content("Disabled") })
+    end
+  )
+end
+```
+
+**Options**: `direction` (dropup/dropend/dropstart)
+
+**Sub-components**:
+
+| Class | Tag | CSS Class |
+|---|---|---|
+| `DropdownMenu` | `<ul>` | `.dropdown-menu` |
+| `DropdownItem` | `<li>` → `<a>`/`<button>` | `.dropdown-item` |
+| `DropdownDivider` | `<li>` → `<hr>` | `.dropdown-divider` |
+| `DropdownHeader` | `<li>` → `<h6>` | `.dropdown-header` |
+
+### Navbar
+
+<img src="images/navbar.png" alt="Navbar component screenshot" width="700">
+
+```ruby
+navbar = ElementComponent::Components::Navbar.new(theme: :dark, background: :dark) do
+  add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { add_content("Brand") })
+  add_content(ElementComponent::Components::NavbarToggler.new(target: "nav"))
+  add_content(ElementComponent::Components::NavbarCollapse.new(id: "nav") do
+    add_content(ElementComponent::Components::NavbarNav.new do
+      add_content(ElementComponent::Components::NavItem.new do
+        add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) { add_content("Home") })
+      end)
+      add_content(ElementComponent::Components::NavItem.new do
+        add_content(ElementComponent::Components::NavLink.new(href: "/about") { add_content("About") })
+      end)
+    end)
+  end)
+end
+```
+
+**Options**: `expand` (sm/md/lg/xl/xxl), `theme` (light/dark), `background`, `fixed` (top/bottom), `sticky` (top/bottom), `container`
+
+**Sub-components**:
+
+| Class | Tag | CSS Class |
+|---|---|---|
+| `NavbarBrand` | `<a>` | `.navbar-brand` |
+| `NavbarToggler` | `<button>` (self-closing) | `.navbar-toggler` |
+| `NavbarCollapse` | `<div>` | `.collapse .navbar-collapse` |
+| `NavbarNav` | `<ul>` | `.navbar-nav` |
+
 ## Development
 
 ```bash
@@ -396,7 +523,7 @@ Or push a version tag (e.g., `v0.6.0`) to trigger the automated release workflow
 
 - [ ] Support for Caching
 - [ ] Pre-built Bulma components
-- [x] Pre-built Bootstrap components (Alert, Badge, Breadcrumb, Button, ButtonGroup, Card, CloseButton, ListGroup, Nav, Pagination, Progress, Spinner, Table)
+- [x] Pre-built Bootstrap components (Alert, Badge, Breadcrumb, Button, ButtonGroup, Card, Carousel, CloseButton, Dropdown, ListGroup, Modal, Nav, Navbar, Pagination, Progress, Spinner, Table)
 - [ ] Enhanced DSL for nested structures
 
 ## Contributing
