@@ -104,6 +104,8 @@ module ElementComponent
         case content
         in Element
           content.render
+        in Proc
+          content.call
         else
           content.to_s
         end
