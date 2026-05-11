@@ -25,8 +25,8 @@ puts
 # =============================================================================
 # Dismissible Alert (use block DSL so close button is always last)
 # =============================================================================
-alert = ElementComponent::Components::Alert.new(variant: :warning, dismissible: true) do
-  add_content("This alert can be dismissed.")
+alert = ElementComponent::Components::Alert.new(variant: :warning, dismissible: true) do |e|
+  e.add_content("This alert can be dismissed.")
 end
 puts "=== Dismissible Alert ==="
 puts alert.render
@@ -48,10 +48,10 @@ puts
 # =============================================================================
 # Alert with Heading and Link (block DSL)
 # =============================================================================
-alert = ElementComponent::Components::Alert.new(variant: :info) do
-  add_content(ElementComponent::Components::AlertHeading.new.tap { |h| h.add_content("Information") })
-  add_content("This is an important notice. ")
-  add_content(ElementComponent::Components::AlertLink.new(href: "/details").tap { |l| l.add_content("View details") })
+alert = ElementComponent::Components::Alert.new(variant: :info) do |e|
+  e.add_content(ElementComponent::Components::AlertHeading.new.tap { |h| h.add_content("Information") })
+  e.add_content("This is an important notice. ")
+  e.add_content(ElementComponent::Components::AlertLink.new(href: "/details").tap { |l| l.add_content("View details") })
 end
 puts "=== Alert with Heading and Link ==="
 puts alert.render
@@ -60,10 +60,10 @@ puts
 # =============================================================================
 # Dismissible Alert with Heading and Link
 # =============================================================================
-alert = ElementComponent::Components::Alert.new(variant: :danger, dismissible: true) do
-  add_content(ElementComponent::Components::AlertHeading.new.tap { |h| h.add_content("Error!") })
-  add_content("Something went wrong. ")
-  add_content(ElementComponent::Components::AlertLink.new(href: "/support").tap do |l|
+alert = ElementComponent::Components::Alert.new(variant: :danger, dismissible: true) do |e|
+  e.add_content(ElementComponent::Components::AlertHeading.new.tap { |h| h.add_content("Error!") })
+  e.add_content("Something went wrong. ")
+  e.add_content(ElementComponent::Components::AlertLink.new(href: "/support").tap do |l|
     l.add_content("Contact support")
   end)
 end

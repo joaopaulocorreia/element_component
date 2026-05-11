@@ -36,9 +36,9 @@ puts
 # =============================================================================
 # Button Group with Size
 # =============================================================================
-group = ElementComponent::Components::ButtonGroup.new(size: :sm) do
-  add_content(ElementComponent::Components::Button.new(variant: :success) { add_content("Save") })
-  add_content(ElementComponent::Components::Button.new(variant: :danger) { add_content("Delete") })
+group = ElementComponent::Components::ButtonGroup.new(size: :sm) do |g|
+  g.add_content(ElementComponent::Components::Button.new(variant: :success) { |b| b.add_content("Save") })
+  g.add_content(ElementComponent::Components::Button.new(variant: :danger) { |b| b.add_content("Delete") })
 end
 puts "=== Small Button Group ==="
 puts group.render

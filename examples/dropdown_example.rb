@@ -5,22 +5,22 @@ require_relative "../lib/element_component"
 # =============================================================================
 # Basic Dropdown
 # =============================================================================
-dropdown = ElementComponent::Components::Dropdown.new do
-  add_content(
+dropdown = ElementComponent::Components::Dropdown.new do |d|
+  d.add_content(
     ElementComponent::Element.new("button",
                                   class: "btn btn-secondary dropdown-toggle",
                                   type: "button",
                                   "data-bs-toggle": "dropdown",
-                                  "aria-expanded": "false") do
-      add_content("Dropdown")
+                                  "aria-expanded": "false") do |btn|
+      btn.add_content("Dropdown")
     end
   )
-  add_content(
-    ElementComponent::Components::DropdownMenu.new do
-      add_content(ElementComponent::Components::DropdownItem.new { add_content("Action") })
-      add_content(ElementComponent::Components::DropdownItem.new { add_content("Another action") })
-      add_content(ElementComponent::Components::DropdownDivider.new)
-      add_content(ElementComponent::Components::DropdownItem.new { add_content("Something else") })
+  d.add_content(
+    ElementComponent::Components::DropdownMenu.new do |menu|
+      menu.add_content(ElementComponent::Components::DropdownItem.new { |item| item.add_content("Action") })
+      menu.add_content(ElementComponent::Components::DropdownItem.new { |item| item.add_content("Another action") })
+      menu.add_content(ElementComponent::Components::DropdownDivider.new)
+      menu.add_content(ElementComponent::Components::DropdownItem.new { |item| item.add_content("Something else") })
     end
   )
 end
@@ -31,22 +31,26 @@ puts
 # =============================================================================
 # Dropdown with Active and Disabled Items
 # =============================================================================
-dropdown = ElementComponent::Components::Dropdown.new do
-  add_content(
+dropdown = ElementComponent::Components::Dropdown.new do |d|
+  d.add_content(
     ElementComponent::Element.new("button",
                                   class: "btn btn-primary dropdown-toggle",
                                   type: "button",
                                   "data-bs-toggle": "dropdown",
-                                  "aria-expanded": "false") do
-      add_content("Menu")
+                                  "aria-expanded": "false") do |btn|
+      btn.add_content("Menu")
     end
   )
-  add_content(
-    ElementComponent::Components::DropdownMenu.new do
-      add_content(ElementComponent::Components::DropdownHeader.new { add_content("Section 1") })
-      add_content(ElementComponent::Components::DropdownItem.new { add_content("Regular item") })
-      add_content(ElementComponent::Components::DropdownItem.new(active: true) { add_content("Active item") })
-      add_content(ElementComponent::Components::DropdownItem.new(disabled: true) { add_content("Disabled item") })
+  d.add_content(
+    ElementComponent::Components::DropdownMenu.new do |menu|
+      menu.add_content(ElementComponent::Components::DropdownHeader.new { |h| h.add_content("Section 1") })
+      menu.add_content(ElementComponent::Components::DropdownItem.new { |item| item.add_content("Regular item") })
+      menu.add_content(ElementComponent::Components::DropdownItem.new(active: true) do |item|
+        item.add_content("Active item")
+      end)
+      menu.add_content(ElementComponent::Components::DropdownItem.new(disabled: true) do |item|
+        item.add_content("Disabled item")
+      end)
     end
   )
 end
@@ -57,20 +61,24 @@ puts
 # =============================================================================
 # Dropdown Type Button Items
 # =============================================================================
-dropdown = ElementComponent::Components::Dropdown.new do
-  add_content(
+dropdown = ElementComponent::Components::Dropdown.new do |d|
+  d.add_content(
     ElementComponent::Element.new("button",
                                   class: "btn btn-success dropdown-toggle",
                                   type: "button",
                                   "data-bs-toggle": "dropdown",
-                                  "aria-expanded": "false") do
-      add_content("Actions")
+                                  "aria-expanded": "false") do |btn|
+      btn.add_content("Actions")
     end
   )
-  add_content(
-    ElementComponent::Components::DropdownMenu.new do
-      add_content(ElementComponent::Components::DropdownItem.new(type: :button) { add_content("Save") })
-      add_content(ElementComponent::Components::DropdownItem.new(type: :button) { add_content("Delete") })
+  d.add_content(
+    ElementComponent::Components::DropdownMenu.new do |menu|
+      menu.add_content(ElementComponent::Components::DropdownItem.new(type: :button) do |item|
+        item.add_content("Save")
+      end)
+      menu.add_content(ElementComponent::Components::DropdownItem.new(type: :button) do |item|
+        item.add_content("Delete")
+      end)
     end
   )
 end
@@ -81,20 +89,20 @@ puts
 # =============================================================================
 # Dropup Direction
 # =============================================================================
-dropdown = ElementComponent::Components::Dropdown.new(direction: :dropup) do
-  add_content(
+dropdown = ElementComponent::Components::Dropdown.new(direction: :dropup) do |d|
+  d.add_content(
     ElementComponent::Element.new("button",
                                   class: "btn btn-warning dropdown-toggle",
                                   type: "button",
                                   "data-bs-toggle": "dropdown",
-                                  "aria-expanded": "false") do
-      add_content("Up")
+                                  "aria-expanded": "false") do |btn|
+      btn.add_content("Up")
     end
   )
-  add_content(
-    ElementComponent::Components::DropdownMenu.new do
-      add_content(ElementComponent::Components::DropdownItem.new { add_content("Item 1") })
-      add_content(ElementComponent::Components::DropdownItem.new { add_content("Item 2") })
+  d.add_content(
+    ElementComponent::Components::DropdownMenu.new do |menu|
+      menu.add_content(ElementComponent::Components::DropdownItem.new { |item| item.add_content("Item 1") })
+      menu.add_content(ElementComponent::Components::DropdownItem.new { |item| item.add_content("Item 2") })
     end
   )
 end
@@ -110,7 +118,7 @@ puts ElementComponent::Components::DropdownMenu.new.render
 puts
 
 puts "=== DropdownItem ==="
-dropdown_item = ElementComponent::Components::DropdownItem.new { add_content("Item") }
+dropdown_item = ElementComponent::Components::DropdownItem.new { |item| item.add_content("Item") }
 puts dropdown_item.render
 puts
 
@@ -119,5 +127,5 @@ puts ElementComponent::Components::DropdownDivider.new.render
 puts
 
 puts "=== DropdownHeader ==="
-dropdown_header = ElementComponent::Components::DropdownHeader.new { add_content("Header") }
+dropdown_header = ElementComponent::Components::DropdownHeader.new { |h| h.add_content("Header") }
 puts dropdown_header.render

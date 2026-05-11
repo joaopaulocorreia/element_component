@@ -7,14 +7,16 @@ require_relative "../lib/element_component"
 # =============================================================================
 modal = ElementComponent::Components::Modal.new(id: "basicModal")
 modal.add_content(
-  ElementComponent::Components::ModalContent.new do
-    add_content(ElementComponent::Components::ModalHeader.new do
-      add_content(ElementComponent::Components::ModalTitle.new { add_content("Modal title") })
+  ElementComponent::Components::ModalContent.new do |mc|
+    mc.add_content(ElementComponent::Components::ModalHeader.new do |mh|
+      mh.add_content(ElementComponent::Components::ModalTitle.new { |mt| mt.add_content("Modal title") })
     end)
-    add_content(ElementComponent::Components::ModalBody.new { add_content("Modal body text goes here.") })
-    add_content(ElementComponent::Components::ModalFooter.new do
-      add_content(ElementComponent::Components::Button.new(variant: :secondary) { add_content("Close") })
-      add_content(ElementComponent::Components::Button.new(variant: :primary) { add_content("Save changes") })
+    mc.add_content(ElementComponent::Components::ModalBody.new { |mb| mb.add_content("Modal body text goes here.") })
+    mc.add_content(ElementComponent::Components::ModalFooter.new do |mf|
+      mf.add_content(ElementComponent::Components::Button.new(variant: :secondary) { |btn| btn.add_content("Close") })
+      mf.add_content(ElementComponent::Components::Button.new(variant: :primary) do |btn|
+        btn.add_content("Save changes")
+      end)
     end)
   end
 )
@@ -27,12 +29,12 @@ puts
 # =============================================================================
 modal = ElementComponent::Components::Modal.new(id: "scrollModal", scrollable: true)
 modal.add_content(
-  ElementComponent::Components::ModalContent.new do
-    add_content(ElementComponent::Components::ModalHeader.new do
-      add_content(ElementComponent::Components::ModalTitle.new { add_content("Scrollable") })
+  ElementComponent::Components::ModalContent.new do |mc|
+    mc.add_content(ElementComponent::Components::ModalHeader.new do |mh|
+      mh.add_content(ElementComponent::Components::ModalTitle.new { |mt| mt.add_content("Scrollable") })
     end)
-    add_content(ElementComponent::Components::ModalBody.new { add_content("Long content body...") })
-    add_content(ElementComponent::Components::ModalFooter.new { add_content("Footer") })
+    mc.add_content(ElementComponent::Components::ModalBody.new { |mb| mb.add_content("Long content body...") })
+    mc.add_content(ElementComponent::Components::ModalFooter.new { |mf| mf.add_content("Footer") })
   end
 )
 puts "=== Scrollable Modal ==="
@@ -44,8 +46,8 @@ puts
 # =============================================================================
 modal = ElementComponent::Components::Modal.new(id: "centerModal", centered: true)
 modal.add_content(
-  ElementComponent::Components::ModalContent.new do
-    add_content(ElementComponent::Components::ModalBody.new { add_content("Centered content") })
+  ElementComponent::Components::ModalContent.new do |mc|
+    mc.add_content(ElementComponent::Components::ModalBody.new { |mb| mb.add_content("Centered content") })
   end
 )
 puts "=== Centered Modal ==="
@@ -57,8 +59,8 @@ puts
 # =============================================================================
 modal = ElementComponent::Components::Modal.new(id: "lgModal", size: :lg)
 modal.add_content(
-  ElementComponent::Components::ModalContent.new do
-    add_content(ElementComponent::Components::ModalBody.new { add_content("Large modal body") })
+  ElementComponent::Components::ModalContent.new do |mc|
+    mc.add_content(ElementComponent::Components::ModalBody.new { |mb| mb.add_content("Large modal body") })
   end
 )
 puts "=== Large Modal ==="
@@ -70,8 +72,8 @@ puts
 # =============================================================================
 modal = ElementComponent::Components::Modal.new(id: "staticModal", static: true)
 modal.add_content(
-  ElementComponent::Components::ModalContent.new do
-    add_content(ElementComponent::Components::ModalBody.new { add_content("Click outside does not close") })
+  ElementComponent::Components::ModalContent.new do |mc|
+    mc.add_content(ElementComponent::Components::ModalBody.new { |mb| mb.add_content("Click outside does not close") })
   end
 )
 puts "=== Static Backdrop Modal ==="
@@ -83,9 +85,9 @@ puts
 # =============================================================================
 modal = ElementComponent::Components::Modal.new(id: "noCloseModal")
 modal.add_content(
-  ElementComponent::Components::ModalContent.new do
-    add_content(ElementComponent::Components::ModalHeader.new(close_button: false) do
-      add_content(ElementComponent::Components::ModalTitle.new { add_content("No close button") })
+  ElementComponent::Components::ModalContent.new do |mc|
+    mc.add_content(ElementComponent::Components::ModalHeader.new(close_button: false) do |mh|
+      mh.add_content(ElementComponent::Components::ModalTitle.new { |mt| mt.add_content("No close button") })
     end)
   end
 )

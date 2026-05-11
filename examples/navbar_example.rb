@@ -5,16 +5,18 @@ require_relative "../lib/element_component"
 # =============================================================================
 # Basic Navbar
 # =============================================================================
-navbar = ElementComponent::Components::Navbar.new do
-  add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { add_content("Navbar") })
-  add_content(ElementComponent::Components::NavbarToggler.new(target: "basicNav"))
-  add_content(ElementComponent::Components::NavbarCollapse.new(id: "basicNav") do
-    add_content(ElementComponent::Components::NavbarNav.new do
-      add_content(ElementComponent::Components::NavItem.new do
-        add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) { add_content("Home") })
+navbar = ElementComponent::Components::Navbar.new do |n|
+  n.add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { |brand| brand.add_content("Navbar") })
+  n.add_content(ElementComponent::Components::NavbarToggler.new(target: "basicNav"))
+  n.add_content(ElementComponent::Components::NavbarCollapse.new(id: "basicNav") do |collapse|
+    collapse.add_content(ElementComponent::Components::NavbarNav.new do |nav|
+      nav.add_content(ElementComponent::Components::NavItem.new do |item|
+        item.add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) do |link|
+          link.add_content("Home")
+        end)
       end)
-      add_content(ElementComponent::Components::NavItem.new do
-        add_content(ElementComponent::Components::NavLink.new(href: "/about") { add_content("About") })
+      nav.add_content(ElementComponent::Components::NavItem.new do |item|
+        item.add_content(ElementComponent::Components::NavLink.new(href: "/about") { |link| link.add_content("About") })
       end)
     end)
   end)
@@ -26,20 +28,24 @@ puts
 # =============================================================================
 # Dark Navbar
 # =============================================================================
-navbar = ElementComponent::Components::Navbar.new(theme: :dark, background: :dark) do
-  add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { add_content("Dark") })
-  add_content(ElementComponent::Components::NavbarToggler.new(target: "darkNav"))
-  add_content(ElementComponent::Components::NavbarCollapse.new(id: "darkNav") do
-    add_content(ElementComponent::Components::NavbarNav.new do
-      add_content(ElementComponent::Components::NavItem.new do
-        add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) { add_content("Home") })
+navbar = ElementComponent::Components::Navbar.new(theme: :dark, background: :dark) do |n|
+  n.add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { |brand| brand.add_content("Dark") })
+  n.add_content(ElementComponent::Components::NavbarToggler.new(target: "darkNav"))
+  n.add_content(ElementComponent::Components::NavbarCollapse.new(id: "darkNav") do |collapse|
+    collapse.add_content(ElementComponent::Components::NavbarNav.new do |nav|
+      nav.add_content(ElementComponent::Components::NavItem.new do |item|
+        item.add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) do |link|
+          link.add_content("Home")
+        end)
       end)
-      add_content(ElementComponent::Components::NavItem.new do
-        add_content(ElementComponent::Components::NavLink.new(href: "/contact") { add_content("Contact") })
+      nav.add_content(ElementComponent::Components::NavItem.new do |item|
+        item.add_content(ElementComponent::Components::NavLink.new(href: "/contact") do |link|
+          link.add_content("Contact")
+        end)
       end)
-      add_content(ElementComponent::Components::NavItem.new do
-        add_content(ElementComponent::Components::NavLink.new(href: "/disabled", disabled: true) do
-          add_content("Disabled")
+      nav.add_content(ElementComponent::Components::NavItem.new do |item|
+        item.add_content(ElementComponent::Components::NavLink.new(href: "/disabled", disabled: true) do |link|
+          link.add_content("Disabled")
         end)
       end)
     end)
@@ -52,13 +58,15 @@ puts
 # =============================================================================
 # Navbar with Container
 # =============================================================================
-navbar = ElementComponent::Components::Navbar.new(container: "container") do
-  add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { add_content("Container") })
-  add_content(ElementComponent::Components::NavbarToggler.new(target: "containerNav"))
-  add_content(ElementComponent::Components::NavbarCollapse.new(id: "containerNav") do
-    add_content(ElementComponent::Components::NavbarNav.new do
-      add_content(ElementComponent::Components::NavItem.new do
-        add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) { add_content("Home") })
+navbar = ElementComponent::Components::Navbar.new(container: "container") do |n|
+  n.add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { |brand| brand.add_content("Container") })
+  n.add_content(ElementComponent::Components::NavbarToggler.new(target: "containerNav"))
+  n.add_content(ElementComponent::Components::NavbarCollapse.new(id: "containerNav") do |collapse|
+    collapse.add_content(ElementComponent::Components::NavbarNav.new do |nav|
+      nav.add_content(ElementComponent::Components::NavItem.new do |item|
+        item.add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) do |link|
+          link.add_content("Home")
+        end)
       end)
     end)
   end)
@@ -70,8 +78,8 @@ puts
 # =============================================================================
 # Navbar Without Container
 # =============================================================================
-navbar = ElementComponent::Components::Navbar.new(container: false) do
-  add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { add_content("Fluid") })
+navbar = ElementComponent::Components::Navbar.new(container: false) do |n|
+  n.add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { |brand| brand.add_content("Fluid") })
 end
 puts "=== Navbar Without Container ==="
 puts navbar.render

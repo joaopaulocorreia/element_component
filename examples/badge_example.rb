@@ -34,8 +34,8 @@ puts
 # =============================================================================
 # Badge with Block
 # =============================================================================
-badge = ElementComponent::Components::Badge.new(variant: :success) do
-  add_content("Completed")
+badge = ElementComponent::Components::Badge.new(variant: :success) do |b|
+  b.add_content("Completed")
 end
 puts "=== Badge with Block ==="
 puts badge.render

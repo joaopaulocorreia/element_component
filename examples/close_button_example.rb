@@ -33,8 +33,8 @@ puts
 # =============================================================================
 # Close Button Inside an Alert (simulated)
 # =============================================================================
-alert = ElementComponent::Components::Alert.new(variant: :warning, dismissible: true) do
-  add_content("This alert has a close button.")
+alert = ElementComponent::Components::Alert.new(variant: :warning, dismissible: true) do |a|
+  a.add_content("This alert has a close button.")
 end
 puts "=== Close Button Inside Alert ==="
 puts alert.render

@@ -13,16 +13,18 @@ puts
 # =============================================================================
 # Nav Tabs
 # =============================================================================
-nav = ElementComponent::Components::Nav.new(type: :tabs) do
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) { add_content("Home") })
+nav = ElementComponent::Components::Nav.new(type: :tabs) do |n|
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) do |link|
+      link.add_content("Home")
+    end)
   end)
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/profile") { add_content("Profile") })
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/profile") { |link| link.add_content("Profile") })
   end)
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/messages", disabled: true) do
-      add_content("Messages")
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/messages", disabled: true) do |link|
+      link.add_content("Messages")
     end)
   end)
 end
@@ -33,12 +35,12 @@ puts
 # =============================================================================
 # Nav Pills
 # =============================================================================
-nav = ElementComponent::Components::Nav.new(type: :pills) do
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/") { add_content("Home") })
+nav = ElementComponent::Components::Nav.new(type: :pills) do |n|
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/") { |link| link.add_content("Home") })
   end)
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/about") { add_content("About") })
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/about") { |link| link.add_content("About") })
   end)
 end
 puts "=== Nav Pills ==="
@@ -48,12 +50,12 @@ puts
 # =============================================================================
 # Nav Fill and Justified
 # =============================================================================
-nav = ElementComponent::Components::Nav.new(type: :pills, fill: true) do
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/") { add_content("Home") })
+nav = ElementComponent::Components::Nav.new(type: :pills, fill: true) do |n|
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/") { |link| link.add_content("Home") })
   end)
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/about") { add_content("About") })
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/about") { |link| link.add_content("About") })
   end)
 end
 puts "=== Nav Fill ==="
@@ -63,12 +65,12 @@ puts
 # =============================================================================
 # Vertical Nav
 # =============================================================================
-nav = ElementComponent::Components::Nav.new(vertical: true) do
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/") { add_content("Home") })
+nav = ElementComponent::Components::Nav.new(vertical: true) do |n|
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/") { |link| link.add_content("Home") })
   end)
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/about") { add_content("About") })
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/about") { |link| link.add_content("About") })
   end)
 end
 puts "=== Vertical Nav ==="

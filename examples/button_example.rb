@@ -57,8 +57,8 @@ puts
 # =============================================================================
 # Button with Block
 # =============================================================================
-btn = ElementComponent::Components::Button.new(variant: :info) do
-  add_content("Info Button")
+btn = ElementComponent::Components::Button.new(variant: :info) do |b|
+  b.add_content("Info Button")
 end
 puts "=== Button with Block ==="
 puts btn.render
