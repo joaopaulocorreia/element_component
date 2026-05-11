@@ -60,8 +60,8 @@ RSpec.describe ElementComponent::Components::Progress do
 
   describe "progress with bar" do
     subject do
-      ElementComponent::Components::Progress.new do
-        add_content(ElementComponent::Components::ProgressBar.new(value: 75, variant: :success))
+      ElementComponent::Components::Progress.new do |p|
+        p.add_content(ElementComponent::Components::ProgressBar.new(value: 75, variant: :success))
       end
     end
 

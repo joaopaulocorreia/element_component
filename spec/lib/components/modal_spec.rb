@@ -57,13 +57,13 @@ RSpec.describe ElementComponent::Components::Modal do
     context "with content block" do
       let(:options) { { size: :md } }
       let(:block) do
-        proc do
-          add_content(ElementComponent::Components::ModalContent.new do
-            add_content(ElementComponent::Components::ModalHeader.new do
-              add_content(ElementComponent::Components::ModalTitle.new { add_content("Title") })
+        proc do |m|
+          m.add_content(ElementComponent::Components::ModalContent.new do |mc|
+            mc.add_content(ElementComponent::Components::ModalHeader.new do |mh|
+              mh.add_content(ElementComponent::Components::ModalTitle.new { |mt| mt.add_content("Title") })
             end)
-            add_content(ElementComponent::Components::ModalBody.new { add_content("Body") })
-            add_content(ElementComponent::Components::ModalFooter.new { add_content("Footer") })
+            mc.add_content(ElementComponent::Components::ModalBody.new { |mb| mb.add_content("Body") })
+            mc.add_content(ElementComponent::Components::ModalFooter.new { |mf| mf.add_content("Footer") })
           end)
         end
       end

@@ -61,12 +61,12 @@ RSpec.describe ElementComponent::Components::Carousel do
 
     context "with items" do
       let(:block) do
-        proc do
-          add_content(ElementComponent::Components::CarouselItem.new(active: true) do
-            add_content(ElementComponent::Components::CarouselCaption.new { add_content("Caption 1") })
+        proc do |c|
+          c.add_content(ElementComponent::Components::CarouselItem.new(active: true) do |item|
+            item.add_content(ElementComponent::Components::CarouselCaption.new { |cap| cap.add_content("Caption 1") })
           end)
-          add_content(ElementComponent::Components::CarouselItem.new do
-            add_content(ElementComponent::Components::CarouselCaption.new { add_content("Caption 2") })
+          c.add_content(ElementComponent::Components::CarouselItem.new do |item|
+            item.add_content(ElementComponent::Components::CarouselCaption.new { |cap| cap.add_content("Caption 2") })
           end)
         end
       end

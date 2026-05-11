@@ -22,13 +22,19 @@ RSpec.describe ElementComponent::Components::Dropdown do
 
     context "with menu and items" do
       let(:block) do
-        proc do
-          add_content(ElementComponent::Components::DropdownMenu.new do
-            add_content(ElementComponent::Components::DropdownItem.new { add_content("Action") })
-            add_content(ElementComponent::Components::DropdownItem.new(active: true) { add_content("Active") })
-            add_content(ElementComponent::Components::DropdownDivider.new)
-            add_content(ElementComponent::Components::DropdownHeader.new { add_content("Section") })
-            add_content(ElementComponent::Components::DropdownItem.new(disabled: true) { add_content("Disabled") })
+        proc do |e|
+          e.add_content(ElementComponent::Components::DropdownMenu.new do |menu|
+            menu.add_content(ElementComponent::Components::DropdownItem.new { |item| item.add_content("Action") })
+            menu.add_content(ElementComponent::Components::DropdownItem.new(active: true) do |item|
+              item.add_content("Active")
+            end)
+            menu.add_content(ElementComponent::Components::DropdownDivider.new)
+            menu.add_content(ElementComponent::Components::DropdownHeader.new do |header|
+              header.add_content("Section")
+            end)
+            menu.add_content(ElementComponent::Components::DropdownItem.new(disabled: true) do |item|
+              item.add_content("Disabled")
+            end)
           end)
         end
       end
@@ -71,7 +77,7 @@ end
 RSpec.describe ElementComponent::Components::DropdownItem do
   subject { described_class.new(**options, &block) }
   let(:options) { {} }
-  let(:block) { proc { add_content("Item") } }
+  let(:block) { proc { |d| d.add_content("Item") } }
 
   describe "#render" do
     context "with default options" do

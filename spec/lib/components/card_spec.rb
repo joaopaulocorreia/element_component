@@ -127,10 +127,10 @@ RSpec.describe ElementComponent::Components::Card do
 
   describe "card with header, body, footer" do
     subject do
-      ElementComponent::Components::Card.new do
-        add_content(ElementComponent::Components::CardHeader.new { add_content("Header") })
-        add_content(ElementComponent::Components::CardBody.new { add_content("Body") })
-        add_content(ElementComponent::Components::CardFooter.new { add_content("Footer") })
+      ElementComponent::Components::Card.new do |c|
+        c.add_content(ElementComponent::Components::CardHeader.new { |ch| ch.add_content("Header") })
+        c.add_content(ElementComponent::Components::CardBody.new { |cb| cb.add_content("Body") })
+        c.add_content(ElementComponent::Components::CardFooter.new { |cf| cf.add_content("Footer") })
       end
     end
 
@@ -144,10 +144,10 @@ RSpec.describe ElementComponent::Components::Card do
 
   describe "card with title and text" do
     subject do
-      ElementComponent::Components::Card.new do
-        add_content(ElementComponent::Components::CardBody.new do
-          add_content(ElementComponent::Components::CardTitle.new { add_content("Title") })
-          add_content(ElementComponent::Components::CardText.new { add_content("Text") })
+      ElementComponent::Components::Card.new do |c|
+        c.add_content(ElementComponent::Components::CardBody.new do |cb|
+          cb.add_content(ElementComponent::Components::CardTitle.new { |ct| ct.add_content("Title") })
+          cb.add_content(ElementComponent::Components::CardText.new { |ct| ct.add_content("Text") })
         end)
       end
     end
@@ -161,8 +161,8 @@ RSpec.describe ElementComponent::Components::Card do
 
   describe "card with image" do
     subject do
-      ElementComponent::Components::Card.new do
-        add_content(ElementComponent::Components::CardImage.new(src: "img.jpg", top: true))
+      ElementComponent::Components::Card.new do |c|
+        c.add_content(ElementComponent::Components::CardImage.new(src: "img.jpg", top: true))
       end
     end
 

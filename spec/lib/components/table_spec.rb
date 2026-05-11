@@ -52,8 +52,8 @@ RSpec.describe ElementComponent::Components::Table do
 
   describe "with block content" do
     subject do
-      ElementComponent::Components::Table.new do
-        add_content("content")
+      ElementComponent::Components::Table.new do |t|
+        t.add_content("content")
       end
     end
 

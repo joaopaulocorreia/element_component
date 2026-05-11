@@ -130,8 +130,8 @@ RSpec.describe ElementComponent::Components::Alert do
 
   describe "Alert with block content" do
     subject do
-      ElementComponent::Components::Alert.new(variant: :danger) do
-        add_content("Error occurred!")
+      ElementComponent::Components::Alert.new(variant: :danger) do |e|
+        e.add_content("Error occurred!")
       end
     end
 
@@ -142,10 +142,10 @@ RSpec.describe ElementComponent::Components::Alert do
 
   describe "Alert with nested components" do
     subject do
-      ElementComponent::Components::Alert.new(variant: :info) do
-        add_content(ElementComponent::Components::AlertHeading.new.tap { |h| h.add_content("Info") })
-        add_content("Something happened. ")
-        add_content(ElementComponent::Components::AlertLink.new(href: "/details").tap do |l|
+      ElementComponent::Components::Alert.new(variant: :info) do |e|
+        e.add_content(ElementComponent::Components::AlertHeading.new.tap { |h| h.add_content("Info") })
+        e.add_content("Something happened. ")
+        e.add_content(ElementComponent::Components::AlertLink.new(href: "/details").tap do |l|
           l.add_content("View details")
         end)
       end

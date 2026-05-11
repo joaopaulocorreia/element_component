@@ -58,8 +58,8 @@ RSpec.describe ElementComponent::Components::Button do
 
   describe "with block content" do
     subject do
-      ElementComponent::Components::Button.new(variant: :info) do
-        add_content("Info")
+      ElementComponent::Components::Button.new(variant: :info) do |b|
+        b.add_content("Info")
       end
     end
 

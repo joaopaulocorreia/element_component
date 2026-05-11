@@ -42,8 +42,8 @@ RSpec.describe ElementComponent::Components::ButtonGroup do
 
   describe "with block content" do
     subject do
-      ElementComponent::Components::ButtonGroup.new do
-        add_content("content")
+      ElementComponent::Components::ButtonGroup.new do |bg|
+        bg.add_content("content")
       end
     end
 
