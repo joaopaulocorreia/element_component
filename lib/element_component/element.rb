@@ -82,8 +82,10 @@ module ElementComponent
 
       after_render(@html) if respond_to? "after_render"
 
-      @html
+      defined?(ActiveSupport::SafeBuffer) ? @html.html_safe : @html
     end
+
+    def render_in(view_context, &block) = render
 
     private
 
