@@ -505,9 +505,7 @@ Or push a version tag (e.g., `v0.6.0`) to trigger the automated release workflow
 ## Roadmap
 
 - [ ] Support for Caching
-- [ ] Pre-built Bulma components
 - [x] Pre-built Bootstrap components (Alert, Badge, Breadcrumb, Button, ButtonGroup, Card, Carousel, CloseButton, Dropdown, ListGroup, Modal, Nav, Navbar, Pagination, Progress, Spinner, Table)
-- [ ] Enhanced DSL for nested structures
 
 ## Contributing
 
