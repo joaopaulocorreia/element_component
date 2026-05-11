@@ -52,13 +52,13 @@ Components live under `ElementComponent::Components`. Each component folder cont
 **Alert constructor**: `Alert.new(variant: :primary, dismissible: false, **attributes, &block)`
 - `variant`: one of `:primary`, `:secondary`, `:success`, `:danger`, `:warning`, `:info`, `:light`, `:dark`
 - `dismissible`: adds `.alert-dismissible` class and appends a `CloseButton`
-- `&block`: instance_eval DSL for adding content inside the element
+- `&block`: block with element parameter for adding content inside the element
 
 **Component guidelines**:
 - Always use `add_attribute()` instead of manipulating the `attributes` hash directly
 - Each class in its own file under a component-named folder
 - Call `super("tag_name", closing_tag: ..., &block)` first, then chain `add_attribute` calls
-- `instance_eval(&block)` lives in `Element#initialize` — do NOT repeat it in components
+- `block.call(self)` lives in `Element#initialize` — passes element to block via block parameter
 - Pass user attributes last via `add_attribute(attributes)`
 
 ### Sub-component example pattern:

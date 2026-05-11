@@ -5,7 +5,7 @@ A lightweight and flexible HTML builder for Ruby. `ElementComponent` provides a 
 ## Key Features
 
 - **Object-Oriented HTML Construction** — Build HTML trees using Ruby objects with dynamic attribute management
-- **Block DSL** — Nest content inline with `instance_eval`-based blocks and the `new_element` helper
+- **Block DSL** — Nest content inline with block parameters and the `new_element` helper
 - **Rendering Hooks** — `before_render`, `after_render`, and `around_render` callbacks for dynamic content
 - **17 Bootstrap 5 Components** — Ready-to-use Alert, Badge, Breadcrumb, Button, ButtonGroup, Card, Carousel, CloseButton, Dropdown, ListGroup, Modal, Nav, Navbar, Pagination, Progress, Spinner, and Table
 - **Chained API** — All `add_*` methods return `self` for method chaining
@@ -41,9 +41,9 @@ puts p.render
 Use a block to add content inline:
 
 ```ruby
-div = ElementComponent::Element.new("div", class: "container") do
-  add_content("Welcome")
-  add_content(ElementComponent::Element.new("h1") { add_content("Title") })
+div = ElementComponent::Element.new("div", class: "container") do |e|
+  e.add_content("Welcome")
+  e.add_content(ElementComponent::Element.new("h1") { |h| h.add_content("Title") })
 end
 puts div.render
 # => <div class="container">Welcome<h1>Title</h1></div>
@@ -54,9 +54,9 @@ puts div.render
 Inside a block, use `new_element` as a shorthand:
 
 ```ruby
-div = ElementComponent::Element.new("div") do
-  add_content(new_element("h1") { add_content("Hello") })
-  add_content(new_element("p", class: "lead") { add_content("World") })
+div = ElementComponent::Element.new("div") do |e|
+  e.add_content(e.new_element("h1") { |h| h.add_content("Hello") })
+  e.add_content(e.new_element("p", class: "lead") { |p| p.add_content("World") })
 end
 puts div.render
 # => <div><h1>Hello</h1><p class="lead">World</p></div>
@@ -73,10 +73,10 @@ div = ElementComponent::Element.new("div")
 div.add_content("plain text")
 
 # Element instance
-div.add_content(ElementComponent::Element.new("span") { add_content("nested") })
+div.add_content(ElementComponent::Element.new("span") { |s| s.add_content("nested") })
 
 # Block (evaluated at render time, has access to new_element)
-div.add_content { new_element("em") { add_content("deferred") } }
+div.add_content { |e| e.new_element("em") { |em| em.add_content("deferred") } }
 
 puts div.render
 # => <div>plain text<span>nested</span><em>deferred</em></div>
@@ -150,8 +150,8 @@ All components live under `ElementComponent::Components` and support the block D
 
 
 ```ruby
-alert = ElementComponent::Components::Alert.new(variant: :success) do
-  add_content("Operation completed!")
+alert = ElementComponent::Components::Alert.new(variant: :success) do |e|
+  e.add_content("Operation completed!")
 end
 # => <div class="alert alert-success" role="alert">Operation completed!</div>
 ```
@@ -161,10 +161,10 @@ end
 Dismissible alerts, headings, and links use sub-components:
 
 ```ruby
-alert = ElementComponent::Components::Alert.new(variant: :warning, dismissible: true) do
-  add_content(ElementComponent::Components::AlertHeading.new { add_content("Warning") })
-  add_content("Please review. ")
-  add_content(ElementComponent::Components::AlertLink.new(href: "/details") { add_content("Details") })
+alert = ElementComponent::Components::Alert.new(variant: :warning, dismissible: true) do |e|
+  e.add_content(ElementComponent::Components::AlertHeading.new { |h| h.add_content("Warning") })
+  e.add_content("Please review. ")
+  e.add_content(ElementComponent::Components::AlertLink.new(href: "/details") { |l| l.add_content("Details") })
 end
 # => <div class="alert alert-warning alert-dismissible" role="alert">
 #      <h4 class="alert-heading">Warning</h4>
@@ -187,15 +187,15 @@ end
 
 ```ruby
 # Standard button
-btn = ElementComponent::Components::Button.new(variant: :primary) { add_content("Click") }
+btn = ElementComponent::Components::Button.new(variant: :primary) { |b| b.add_content("Click") }
 # => <button class="btn btn-primary" type="button">Click</button>
 
 # Outline variant
-btn = ElementComponent::Components::Button.new(variant: :danger, outline: true) { add_content("Delete") }
+btn = ElementComponent::Components::Button.new(variant: :danger, outline: true) { |b| b.add_content("Delete") }
 # => <button class="btn btn-outline-danger" type="button">Delete</button>
 
 # As a link
-btn = ElementComponent::Components::Button.new(variant: :primary, href: "/home") { add_content("Home") }
+btn = ElementComponent::Components::Button.new(variant: :primary, href: "/home") { |b| b.add_content("Home") }
 # => <a class="btn btn-primary" href="/home">Home</a>
 ```
 
@@ -205,10 +205,10 @@ btn = ElementComponent::Components::Button.new(variant: :primary, href: "/home")
 
 
 ```ruby
-badge = ElementComponent::Components::Badge.new(variant: :primary) { add_content("New") }
+badge = ElementComponent::Components::Badge.new(variant: :primary) { |b| b.add_content("New") }
 # => <span class="badge bg-primary">New</span>
 
-pill = ElementComponent::Components::Badge.new(variant: :danger, pill: true) { add_content("99+") }
+pill = ElementComponent::Components::Badge.new(variant: :danger, pill: true) { |b| b.add_content("99+") }
 # => <span class="badge bg-danger rounded-pill">99+</span>
 ```
 
@@ -216,13 +216,13 @@ pill = ElementComponent::Components::Badge.new(variant: :danger, pill: true) { a
 
 
 ```ruby
-card = ElementComponent::Components::Card.new do
-  add_content(ElementComponent::Components::CardImage.new(src: "photo.jpg", top: true))
-  add_content(ElementComponent::Components::CardBody.new do
-    add_content(ElementComponent::Components::CardTitle.new { add_content("Title") })
-    add_content(ElementComponent::Components::CardText.new { add_content("Some text.") })
+card = ElementComponent::Components::Card.new do |c|
+  c.add_content(ElementComponent::Components::CardImage.new(src: "photo.jpg", top: true))
+  c.add_content(ElementComponent::Components::CardBody.new do |body|
+    body.add_content(ElementComponent::Components::CardTitle.new { |t| t.add_content("Title") })
+    body.add_content(ElementComponent::Components::CardText.new { |t| t.add_content("Some text.") })
   end)
-  add_content(ElementComponent::Components::CardFooter.new { add_content("Footer") })
+  c.add_content(ElementComponent::Components::CardFooter.new { |f| f.add_content("Footer") })
 end
 ```
 
@@ -241,12 +241,12 @@ end
 
 
 ```ruby
-nav = ElementComponent::Components::Nav.new(type: :tabs) do
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) { add_content("Home") })
+nav = ElementComponent::Components::Nav.new(type: :tabs) do |n|
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) { |l| l.add_content("Home") })
   end)
-  add_content(ElementComponent::Components::NavItem.new do
-    add_content(ElementComponent::Components::NavLink.new(href: "/profile") { add_content("Profile") })
+  n.add_content(ElementComponent::Components::NavItem.new do |item|
+    item.add_content(ElementComponent::Components::NavLink.new(href: "/profile") { |l| l.add_content("Profile") })
   end)
 end
 # => <ul class="nav nav-tabs">...</ul>
@@ -258,10 +258,10 @@ end
 
 
 ```ruby
-crumb = ElementComponent::Components::Breadcrumb.new do
-  add_content(ElementComponent::Components::BreadcrumbItem.new(href: "/") { add_content("Home") })
-  add_content(ElementComponent::Components::BreadcrumbItem.new(href: "/section") { add_content("Section") })
-  add_content(ElementComponent::Components::BreadcrumbItem.new(active: true) { add_content("Current") })
+crumb = ElementComponent::Components::Breadcrumb.new do |b|
+  b.add_content(ElementComponent::Components::BreadcrumbItem.new(href: "/") { |i| i.add_content("Home") })
+  b.add_content(ElementComponent::Components::BreadcrumbItem.new(href: "/section") { |i| i.add_content("Section") })
+  b.add_content(ElementComponent::Components::BreadcrumbItem.new(active: true) { |i| i.add_content("Current") })
 end
 # => <nav aria-label="breadcrumb"><ol class="breadcrumb">...</ol></nav>
 ```
@@ -270,10 +270,10 @@ end
 
 
 ```ruby
-list = ElementComponent::Components::ListGroup.new(flush: true) do
-  add_content(ElementComponent::Components::ListGroupItem.new { add_content("Item 1") })
-  add_content(ElementComponent::Components::ListGroupItem.new(active: true) { add_content("Item 2") })
-  add_content(ElementComponent::Components::ListGroupItem.new(href: "/link") { add_content("Link") })
+list = ElementComponent::Components::ListGroup.new(flush: true) do |l|
+  l.add_content(ElementComponent::Components::ListGroupItem.new { |i| i.add_content("Item 1") })
+  l.add_content(ElementComponent::Components::ListGroupItem.new(active: true) { |i| i.add_content("Item 2") })
+  l.add_content(ElementComponent::Components::ListGroupItem.new(href: "/link") { |i| i.add_content("Link") })
 end
 # => <ul class="list-group list-group-flush">...</ul>
 ```
@@ -284,9 +284,9 @@ end
 
 
 ```ruby
-progress = ElementComponent::Components::Progress.new do
-  add_content(ElementComponent::Components::ProgressBar.new(value: 75, variant: :success, striped: true) do
-    add_content("75%")
+progress = ElementComponent::Components::Progress.new do |p|
+  p.add_content(ElementComponent::Components::ProgressBar.new(value: 75, variant: :success, striped: true) do |bar|
+    bar.add_content("75%")
   end)
 end
 # => <div class="progress" role="progressbar"><div class="progress-bar bg-success progress-bar-striped" ...>75%</div></div>
@@ -307,9 +307,9 @@ grow = ElementComponent::Components::Spinner.new(type: :grow, variant: :success)
 
 
 ```ruby
-table = ElementComponent::Components::Table.new(striped: true, bordered: true, hover: true) do
-  add_content("<thead><tr><th>Name</th><th>Age</th></tr></thead>")
-  add_content("<tbody><tr><td>John</td><td>30</td></tr></tbody>")
+table = ElementComponent::Components::Table.new(striped: true, bordered: true, hover: true) do |t|
+  t.add_content("<thead><tr><th>Name</th><th>Age</th></tr></thead>")
+  t.add_content("<tbody><tr><td>John</td><td>30</td></tr></tbody>")
 end
 # => <table class="table table-striped table-bordered table-hover">...</table>
 ```
@@ -320,9 +320,9 @@ end
 
 
 ```ruby
-nav = ElementComponent::Components::Pagination.new(size: :lg) do
-  add_content(ElementComponent::Components::PageItem.new(active: true) { add_content("1") })
-  add_content(ElementComponent::Components::PageItem.new { add_content("2") })
+nav = ElementComponent::Components::Pagination.new(size: :lg) do |p|
+  p.add_content(ElementComponent::Components::PageItem.new(active: true) { |i| i.add_content("1") })
+  p.add_content(ElementComponent::Components::PageItem.new { |i| i.add_content("2") })
 end
 # => <nav aria-label="Pagination"><ul class="pagination pagination-lg">...</ul></nav>
 ```
@@ -331,10 +331,10 @@ end
 
 
 ```ruby
-group = ElementComponent::Components::ButtonGroup.new do
-  add_content(ElementComponent::Components::Button.new(variant: :primary) { add_content("Left") })
-  add_content(ElementComponent::Components::Button.new(variant: :primary) { add_content("Middle") })
-  add_content(ElementComponent::Components::Button.new(variant: :primary) { add_content("Right") })
+group = ElementComponent::Components::ButtonGroup.new do |g|
+  g.add_content(ElementComponent::Components::Button.new(variant: :primary) { |b| b.add_content("Left") })
+  g.add_content(ElementComponent::Components::Button.new(variant: :primary) { |b| b.add_content("Middle") })
+  g.add_content(ElementComponent::Components::Button.new(variant: :primary) { |b| b.add_content("Right") })
 end
 # => <div class="btn-group" role="group">...</div>
 ```
@@ -356,15 +356,15 @@ disabled = ElementComponent::Components::CloseButton.new(disabled: true)
 
 
 ```ruby
-modal = ElementComponent::Components::Modal.new(id: "exampleModal") do
-  add_content(ElementComponent::Components::ModalContent.new do
-    add_content(ElementComponent::Components::ModalHeader.new do
-      add_content(ElementComponent::Components::ModalTitle.new { add_content("Modal title") })
+modal = ElementComponent::Components::Modal.new(id: "exampleModal") do |m|
+  m.add_content(ElementComponent::Components::ModalContent.new do |content|
+    content.add_content(ElementComponent::Components::ModalHeader.new do |header|
+      header.add_content(ElementComponent::Components::ModalTitle.new { |t| t.add_content("Modal title") })
     end)
-    add_content(ElementComponent::Components::ModalBody.new { add_content("Modal body text.") })
-    add_content(ElementComponent::Components::ModalFooter.new do
-      add_content(ElementComponent::Components::Button.new(variant: :secondary) { add_content("Close") })
-      add_content(ElementComponent::Components::Button.new(variant: :primary) { add_content("Save") })
+    content.add_content(ElementComponent::Components::ModalBody.new { |body| body.add_content("Modal body text.") })
+    content.add_content(ElementComponent::Components::ModalFooter.new do |footer|
+      footer.add_content(ElementComponent::Components::Button.new(variant: :secondary) { |b| b.add_content("Close") })
+      footer.add_content(ElementComponent::Components::Button.new(variant: :primary) { |b| b.add_content("Save") })
     end)
   end)
 end
@@ -387,12 +387,12 @@ end
 
 
 ```ruby
-carousel = ElementComponent::Components::Carousel.new(id: "slides") do
-  add_content(ElementComponent::Components::CarouselItem.new(active: true) do
-    add_content(%(<img src="slide1.jpg" class="d-block w-100" alt="...">))
+carousel = ElementComponent::Components::Carousel.new(id: "slides") do |c|
+  c.add_content(ElementComponent::Components::CarouselItem.new(active: true) do |item|
+    item.add_content(%(<img src="slide1.jpg" class="d-block w-100" alt="...">))
   end)
-  add_content(ElementComponent::Components::CarouselItem.new do
-    add_content(%(<img src="slide2.jpg" class="d-block w-100" alt="...">))
+  c.add_content(ElementComponent::Components::CarouselItem.new do |item|
+    item.add_content(%(<img src="slide2.jpg" class="d-block w-100" alt="...">))
   end)
 end
 ```
@@ -410,20 +410,20 @@ end
 
 
 ```ruby
-dropdown = ElementComponent::Components::Dropdown.new do
-  add_content(
+dropdown = ElementComponent::Components::Dropdown.new do |d|
+  d.add_content(
     ElementComponent::Element.new("button",
       class: "btn btn-secondary dropdown-toggle",
       type: "button",
       "data-bs-toggle": "dropdown",
-      "aria-expanded": "false") { add_content("Dropdown") }
+      "aria-expanded": "false") { |b| b.add_content("Dropdown") }
   )
-  add_content(
-    ElementComponent::Components::DropdownMenu.new do
-      add_content(ElementComponent::Components::DropdownItem.new { add_content("Action") })
-      add_content(ElementComponent::Components::DropdownItem.new(active: true) { add_content("Active") })
-      add_content(ElementComponent::Components::DropdownDivider.new)
-      add_content(ElementComponent::Components::DropdownItem.new(disabled: true) { add_content("Disabled") })
+  d.add_content(
+    ElementComponent::Components::DropdownMenu.new do |menu|
+      menu.add_content(ElementComponent::Components::DropdownItem.new { |i| i.add_content("Action") })
+      menu.add_content(ElementComponent::Components::DropdownItem.new(active: true) { |i| i.add_content("Active") })
+      menu.add_content(ElementComponent::Components::DropdownDivider.new)
+      menu.add_content(ElementComponent::Components::DropdownItem.new(disabled: true) { |i| i.add_content("Disabled") })
     end
   )
 end
@@ -444,16 +444,16 @@ end
 
 
 ```ruby
-navbar = ElementComponent::Components::Navbar.new(theme: :dark, background: :dark) do
-  add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { add_content("Brand") })
-  add_content(ElementComponent::Components::NavbarToggler.new(target: "nav"))
-  add_content(ElementComponent::Components::NavbarCollapse.new(id: "nav") do
-    add_content(ElementComponent::Components::NavbarNav.new do
-      add_content(ElementComponent::Components::NavItem.new do
-        add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) { add_content("Home") })
+navbar = ElementComponent::Components::Navbar.new(theme: :dark, background: :dark) do |n|
+  n.add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { |b| b.add_content("Brand") })
+  n.add_content(ElementComponent::Components::NavbarToggler.new(target: "nav"))
+  n.add_content(ElementComponent::Components::NavbarCollapse.new(id: "nav") do |collapse|
+    collapse.add_content(ElementComponent::Components::NavbarNav.new do |nav|
+      nav.add_content(ElementComponent::Components::NavItem.new do |item|
+        item.add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) { |l| l.add_content("Home") })
       end)
-      add_content(ElementComponent::Components::NavItem.new do
-        add_content(ElementComponent::Components::NavLink.new(href: "/about") { add_content("About") })
+      nav.add_content(ElementComponent::Components::NavItem.new do |item|
+        item.add_content(ElementComponent::Components::NavLink.new(href: "/about") { |l| l.add_content("About") })
       end)
     end)
   end)
