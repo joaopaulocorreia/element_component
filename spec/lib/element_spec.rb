@@ -105,6 +105,36 @@ RSpec.describe ElementComponent::Element do
     end
   end
 
+  describe "new_element with block" do
+    it "creates element with block content via constructor DSL" do
+      div = ElementComponent::Element.new("div")
+      div.add_content(div.new_element("p") { add_content("text") })
+      expect(div.render).to eq("<div><p>text</p></div>")
+    end
+
+    it "creates element with block inside a Proc" do
+      div = ElementComponent::Element.new("div")
+      div.add_content { new_element("span") { add_content("nested") } }
+      expect(div.render).to eq("<div><span>nested</span></div>")
+    end
+
+    it "creates nested new_element with chain of blocks" do
+      div = ElementComponent::Element.new("div") do
+        add_content(new_element("ul") do
+          add_content(new_element("li") { add_content("item") })
+        end)
+      end
+      expect(div.render).to eq("<div><ul><li>item</li></ul></div>")
+    end
+
+    it "creates element with block and attributes" do
+      div = ElementComponent::Element.new("div") do
+        add_content(new_element("a", href: "/link") { add_content("click") })
+      end
+      expect(div.render).to eq("<div><a href=\"/link\">click</a></div>")
+    end
+  end
+
   describe "Add attribute to element" do
     before { subject.add_attribute(class: "margin") }
 

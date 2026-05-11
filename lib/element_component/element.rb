@@ -67,7 +67,7 @@ module ElementComponent
       @attributes = {}
     end
 
-    def new_element(*args, **kargs) = Element.new(*args, **kargs)
+    def new_element(...) = Element.new(...)
 
     def render
       @html = String.new
