@@ -32,7 +32,7 @@ puts
 # Spinner with Screen Reader Text
 # =============================================================================
 spinner = ElementComponent::Components::Spinner.new do
-  add_content(ElementComponent::Components::VisuallyHidden.new { add_content("Loading...") })
+  add_content(ElementComponent::Element.new("span", class: "visually-hidden") { add_content("Loading...") })
 end
 puts "=== Spinner with Text ==="
 puts spinner.render
