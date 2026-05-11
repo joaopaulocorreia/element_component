@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "element_component"
 
 RSpec.configure do |config|

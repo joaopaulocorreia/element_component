@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ElementComponent
   class Element
     attr_reader :element, :attributes, :contents, :html
@@ -5,7 +7,7 @@ module ElementComponent
     def initialize(element, closing_tag: true, **attribute)
       @element = element
       @closing_tag = closing_tag
-      @html = ""
+      @html = String.new
 
       add_attribute!(attribute)
       reset_contents!
@@ -67,15 +69,15 @@ module ElementComponent
     def new_element(*args, **kargs) = Element.new(*args, **kargs)
 
     def render
-      before_render if respond_to? 'before_render'
+      before_render if respond_to? "before_render"
 
-      if respond_to? 'around_render'
+      if respond_to? "around_render"
         around_render { build }
       else
         build
       end
 
-      after_render(@html) if respond_to? 'after_render'
+      after_render(@html) if respond_to? "after_render"
 
       @html
     end
