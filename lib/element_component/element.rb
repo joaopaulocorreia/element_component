@@ -100,12 +100,19 @@ module ElementComponent
     end
 
     def mount_content
-      @contents.map do |content|
+      @contents.dup.map do |content|
         case content
         in Element
           content.render
         in Proc
-          content.call
+          result = instance_eval(&content)
+          if result.equal?(self)
+            ""
+          elsif result.respond_to?(:render)
+            result.render
+          else
+            result.to_s
+          end
         else
           content.to_s
         end

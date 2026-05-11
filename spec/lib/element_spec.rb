@@ -71,6 +71,40 @@ RSpec.describe ElementComponent::Element do
     end
   end
 
+  describe "Element with Proc content via add_content(&block)" do
+    it "renders new_element inside a Proc" do
+      element = ElementComponent::Element.new("div")
+      element.add_content { new_element("p") }
+      expect(element.render).to eq("<div><p></p></div>")
+    end
+
+    it "renders new_element with content inside a Proc" do
+      element = ElementComponent::Element.new("div")
+      element.add_content { new_element("span").tap { |s| s.add_content("text") } }
+      expect(element.render).to eq("<div><span>text</span></div>")
+    end
+
+    it "renders Proc returning string" do
+      element = ElementComponent::Element.new("div")
+      element.add_content { "string from proc" }
+      expect(element.render).to eq("<div>string from proc</div>")
+    end
+
+    it "renders mixed content with Proc and string" do
+      element = ElementComponent::Element.new("div")
+      element.add_content("before ")
+      element.add_content { new_element("em") }
+      element.add_content(" after")
+      expect(element.render).to eq("<div>before <em></em> after</div>")
+    end
+
+    it "renders Proc with add_content returning self gracefully" do
+      element = ElementComponent::Element.new("div")
+      element.add_content { add_content("nested") }
+      expect(element.render).to eq("<div></div>")
+    end
+  end
+
   describe "Add attribute to element" do
     before { subject.add_attribute(class: "margin") }
 
