@@ -59,6 +59,18 @@ RSpec.describe ElementComponent::Element do
     end
   end
 
+  describe "Element with block content" do
+    subject { ElementComponent::Element.new("div") { add_content("block content") } }
+
+    it "renders content from block" do
+      expect(subject.contents).to eq(["block content"])
+    end
+
+    it "renders block content in HTML" do
+      expect(subject.render).to eq("<div>block content</div>")
+    end
+  end
+
   describe "Add attribute to element" do
     before { subject.add_attribute(class: "margin") }
 

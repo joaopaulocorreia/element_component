@@ -4,13 +4,14 @@ module ElementComponent
   class Element
     attr_reader :element, :attributes, :contents, :html
 
-    def initialize(element, closing_tag: true, **attribute)
+    def initialize(element, closing_tag: true, **attribute, &block)
       @element = element
       @closing_tag = closing_tag
       @html = String.new
 
       add_attribute!(attribute)
       reset_contents!
+      instance_eval(&block) if block
     end
 
     def add_content!(content)

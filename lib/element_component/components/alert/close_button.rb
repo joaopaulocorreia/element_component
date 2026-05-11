@@ -10,7 +10,7 @@ module ElementComponent
         add_attribute(type: "button")
         add_attribute("data-bs-dismiss": "alert")
         add_attribute("aria-label": "Close")
-        attributes.each { |key, value| add_attribute(key => value) }
+        add_attribute(attributes) unless attributes.empty?
       end
     end
   end

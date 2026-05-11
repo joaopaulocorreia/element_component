@@ -8,7 +8,7 @@ module ElementComponent
 
         add_attribute(class: "alert-link")
         add_attribute(href: href)
-        attributes.each { |key, value| add_attribute(key => value) }
+        add_attribute(attributes) unless attributes.empty?
       end
     end
   end

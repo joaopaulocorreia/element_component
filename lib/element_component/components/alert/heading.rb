@@ -7,7 +7,7 @@ module ElementComponent
         super("h4")
 
         add_attribute(class: "alert-heading")
-        attributes.each { |key, value| add_attribute(key => value) }
+        add_attribute(attributes) unless attributes.empty?
       end
     end
   end

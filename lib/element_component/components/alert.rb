@@ -10,16 +10,14 @@ module ElementComponent
       VALID_CONTEXTS = %i[primary secondary success danger warning info light dark].freeze
 
       def initialize(context: :primary, dismissible: false, **attributes, &block)
-        super("div")
+        super("div", &block)
 
         add_attribute(class: "alert")
         add_attribute(class: "alert-#{context}")
         add_attribute(class: "alert-dismissible") if dismissible
         add_attribute(role: "alert")
 
-        attributes.each { |key, value| add_attribute(key => value) }
-
-        instance_eval(&block) if block
+        add_attribute(attributes) unless attributes.empty?
         add_content(AlertCloseButton.new) if dismissible
       end
     end
