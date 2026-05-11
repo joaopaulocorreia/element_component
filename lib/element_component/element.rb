@@ -70,6 +70,8 @@ module ElementComponent
     def new_element(*args, **kargs) = Element.new(*args, **kargs)
 
     def render
+      @html = String.new
+
       before_render if respond_to? "before_render"
 
       if respond_to? "around_render"
