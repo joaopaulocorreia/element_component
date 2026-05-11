@@ -148,7 +148,6 @@ All components live under `ElementComponent::Components` and support the block D
 
 ### Alert
 
-<img src="images/alert.png" alt="Alert component screenshot" width="700">
 
 ```ruby
 alert = ElementComponent::Components::Alert.new(variant: :success) do
@@ -185,7 +184,6 @@ end
 
 ### Button
 
-<img src="images/button.png" alt="Button component screenshot" width="700">
 
 ```ruby
 # Standard button
@@ -205,7 +203,6 @@ btn = ElementComponent::Components::Button.new(variant: :primary, href: "/home")
 
 ### Badge
 
-<img src="images/badge.png" alt="Badge component screenshot" width="700">
 
 ```ruby
 badge = ElementComponent::Components::Badge.new(variant: :primary) { add_content("New") }
@@ -217,7 +214,6 @@ pill = ElementComponent::Components::Badge.new(variant: :danger, pill: true) { a
 
 ### Card
 
-<img src="images/card.png" alt="Card component screenshot" width="700">
 
 ```ruby
 card = ElementComponent::Components::Card.new do
@@ -243,7 +239,6 @@ end
 
 ### Nav
 
-<img src="images/nav.png" alt="Nav component screenshot" width="700">
 
 ```ruby
 nav = ElementComponent::Components::Nav.new(type: :tabs) do
@@ -261,7 +256,6 @@ end
 
 ### Breadcrumb
 
-<img src="images/breadcrumb.png" alt="Breadcrumb component screenshot" width="700">
 
 ```ruby
 crumb = ElementComponent::Components::Breadcrumb.new do
@@ -274,7 +268,6 @@ end
 
 ### ListGroup
 
-<img src="images/list_group.png" alt="ListGroup component screenshot" width="700">
 
 ```ruby
 list = ElementComponent::Components::ListGroup.new(flush: true) do
@@ -289,7 +282,6 @@ end
 
 ### Progress
 
-<img src="images/progress.png" alt="Progress component screenshot" width="700">
 
 ```ruby
 progress = ElementComponent::Components::Progress.new do
@@ -302,7 +294,6 @@ end
 
 ### Spinner
 
-<img src="images/spinner.png" alt="Spinner component screenshot" width="700">
 
 ```ruby
 border = ElementComponent::Components::Spinner.new(type: :border, variant: :primary)
@@ -314,7 +305,6 @@ grow = ElementComponent::Components::Spinner.new(type: :grow, variant: :success)
 
 ### Table
 
-<img src="images/table.png" alt="Table component screenshot" width="700">
 
 ```ruby
 table = ElementComponent::Components::Table.new(striped: true, bordered: true, hover: true) do
@@ -328,7 +318,6 @@ end
 
 ### Pagination
 
-<img src="images/pagination.png" alt="Pagination component screenshot" width="700">
 
 ```ruby
 nav = ElementComponent::Components::Pagination.new(size: :lg) do
@@ -340,7 +329,6 @@ end
 
 ### ButtonGroup
 
-<img src="images/button_group.png" alt="ButtonGroup component screenshot" width="700">
 
 ```ruby
 group = ElementComponent::Components::ButtonGroup.new do
@@ -355,7 +343,6 @@ end
 
 ### CloseButton
 
-<img src="images/close_button.png" alt="CloseButton component screenshot" width="700">
 
 ```ruby
 btn = ElementComponent::Components::CloseButton.new
@@ -367,7 +354,6 @@ disabled = ElementComponent::Components::CloseButton.new(disabled: true)
 
 ### Modal
 
-<img src="images/modal.png" alt="Modal component screenshot" width="700">
 
 ```ruby
 modal = ElementComponent::Components::Modal.new(id: "exampleModal") do
@@ -399,7 +385,6 @@ end
 
 ### Carousel
 
-<img src="images/carousel.png" alt="Carousel component screenshot" width="700">
 
 ```ruby
 carousel = ElementComponent::Components::Carousel.new(id: "slides") do
@@ -423,7 +408,6 @@ end
 
 ### Dropdown
 
-<img src="images/dropdown.png" alt="Dropdown component screenshot" width="700">
 
 ```ruby
 dropdown = ElementComponent::Components::Dropdown.new do
@@ -458,7 +442,6 @@ end
 
 ### Navbar
 
-<img src="images/navbar.png" alt="Navbar component screenshot" width="700">
 
 ```ruby
 navbar = ElementComponent::Components::Navbar.new(theme: :dark, background: :dark) do

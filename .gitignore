@@ -10,11 +10,3 @@
 # rspec failure tracking
 .rspec_status
 /.
-
-# Node.js (used for screenshot generation)
-node_modules/
-package.json
-package-lock.json
-
-# Generated screenshots
-images/
