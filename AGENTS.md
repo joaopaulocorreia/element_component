@@ -57,17 +57,18 @@ Components live under `ElementComponent::Components`. Each component folder cont
 **Component guidelines**:
 - Always use `add_attribute()` instead of manipulating the `attributes` hash directly
 - Each class in its own file under a component-named folder
-- Call `super("tag_name", closing_tag: ...)` first, then chain `add_attribute` calls
-- Pass user attributes last via `attributes.each { |key, value| add_attribute(key => value) }`
+- Call `super("tag_name", closing_tag: ..., &block)` first, then chain `add_attribute` calls
+- `instance_eval(&block)` lives in `Element#initialize` — do NOT repeat it in components
+- Pass user attributes last via `add_attribute(attributes)`
 
 ### Sub-component example pattern:
 
 ```ruby
 class AlertHeading < Element
-  def initialize(**attributes)
-    super("h4")
+  def initialize(**attributes, &block)
+    super("h4", &block)
     add_attribute(class: "alert-heading")
-    attributes.each { |key, value| add_attribute(key => value) }
+    add_attribute(attributes)
   end
 end
 ```
