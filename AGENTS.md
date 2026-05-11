@@ -44,13 +44,13 @@ Components live under `ElementComponent::Components`. Each component folder cont
 
 | Component | Class | Description |
 |---|---|---|
-| Alert | `Components::Alert` | `.alert` container with context |
+| Alert | `Components::Alert` | `.alert` container with variant |
 | Alert Heading | `Components::AlertHeading` | `.alert-heading` (`<h4>`) |
 | Alert Link | `Components::AlertLink` | `.alert-link` (`<a>`) |
 | Alert Close | `Components::AlertCloseButton` | `.btn-close` (self-closing `<button>`) |
 
-**Alert constructor**: `Alert.new(context: :primary, dismissible: false, **attributes, &block)`
-- `context`: one of `:primary`, `:secondary`, `:success`, `:danger`, `:warning`, `:info`, `:light`, `:dark`
+**Alert constructor**: `Alert.new(variant: :primary, dismissible: false, **attributes, &block)`
+- `variant`: one of `:primary`, `:secondary`, `:success`, `:danger`, `:warning`, `:info`, `:light`, `:dark`
 - `dismissible`: adds `.alert-dismissible` class and appends a `CloseButton`
 - `&block`: instance_eval DSL for adding content inside the element
 

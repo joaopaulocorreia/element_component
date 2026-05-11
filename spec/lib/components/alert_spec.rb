@@ -13,7 +13,7 @@ RSpec.describe ElementComponent::Components::Alert do
       expect(subject.attributes[:role]).to eq(["alert"])
     end
 
-    it "has default context class" do
+    it "has default variant" do
       expect(subject.attributes[:class]).to include("alert")
       expect(subject.attributes[:class]).to include("alert-primary")
     end
@@ -23,17 +23,17 @@ RSpec.describe ElementComponent::Components::Alert do
     end
   end
 
-  describe "Alert with different contexts" do
-    ElementComponent::Components::Alert::VALID_CONTEXTS.each do |context|
-      it "renders alert-#{context}" do
-        alert = ElementComponent::Components::Alert.new(context: context)
-        expect(alert.render).to include("alert-#{context}")
+  describe "Alert with different variants" do
+    ElementComponent::Components::Alert::VALID_VARIANTS.each do |variant|
+      it "renders alert-#{variant}" do
+        alert = ElementComponent::Components::Alert.new(variant: variant)
+        expect(alert.render).to include("alert-#{variant}")
       end
     end
   end
 
   describe "Alert with dismissible" do
-    subject { ElementComponent::Components::Alert.new(context: :warning, dismissible: true) }
+    subject { ElementComponent::Components::Alert.new(variant: :warning, dismissible: true) }
 
     it "has alert-dismissible class" do
       expect(subject.attributes[:class]).to include("alert-dismissible")
@@ -53,7 +53,7 @@ RSpec.describe ElementComponent::Components::Alert do
   end
 
   describe "Alert with custom class" do
-    subject { ElementComponent::Components::Alert.new(context: :success, class: "custom-alert") }
+    subject { ElementComponent::Components::Alert.new(variant: :success, class: "custom-alert") }
 
     it "preserves custom class" do
       expect(subject.attributes[:class]).to include("custom-alert")
@@ -130,7 +130,7 @@ RSpec.describe ElementComponent::Components::Alert do
 
   describe "Alert with block content" do
     subject do
-      ElementComponent::Components::Alert.new(context: :danger) do
+      ElementComponent::Components::Alert.new(variant: :danger) do
         add_content("Error occurred!")
       end
     end
@@ -142,7 +142,7 @@ RSpec.describe ElementComponent::Components::Alert do
 
   describe "Alert with nested components" do
     subject do
-      ElementComponent::Components::Alert.new(context: :info) do
+      ElementComponent::Components::Alert.new(variant: :info) do
         add_content(ElementComponent::Components::AlertHeading.new.tap { |h| h.add_content("Info") })
         add_content("Something happened. ")
         add_content(ElementComponent::Components::AlertLink.new(href: "/details").tap do |l|

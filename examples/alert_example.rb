@@ -5,19 +5,19 @@ require_relative "../lib/element_component"
 # =============================================================================
 # Basic Alert
 # =============================================================================
-alert = ElementComponent::Components::Alert.new(context: :success)
+alert = ElementComponent::Components::Alert.new(variant: :success)
 alert.add_content("Operation completed successfully!")
 puts "=== Basic Alert ==="
 puts alert.render
 puts
 
 # =============================================================================
-# All Contexts
+# All Variants
 # =============================================================================
 puts "=== All Alert Contexts ==="
-ElementComponent::Components::Alert::VALID_CONTEXTS.each do |context|
-  alert = ElementComponent::Components::Alert.new(context: context)
-  alert.add_content("#{context.capitalize} alert message here.")
+ElementComponent::Components::Alert::VALID_VARIANTS.each do |variant|
+  alert = ElementComponent::Components::Alert.new(variant: variant)
+  alert.add_content("#{variant.capitalize} alert message here.")
   puts alert.render
 end
 puts
@@ -25,7 +25,7 @@ puts
 # =============================================================================
 # Dismissible Alert (use block DSL so close button is always last)
 # =============================================================================
-alert = ElementComponent::Components::Alert.new(context: :warning, dismissible: true) do
+alert = ElementComponent::Components::Alert.new(variant: :warning, dismissible: true) do
   add_content("This alert can be dismissed.")
 end
 puts "=== Dismissible Alert ==="
@@ -36,7 +36,7 @@ puts
 # Alert with Custom Attributes
 # =============================================================================
 alert = ElementComponent::Components::Alert.new(
-  context: :primary,
+  variant: :primary,
   id: "main-alert",
   style: "margin-top: 20px;"
 )
@@ -48,7 +48,7 @@ puts
 # =============================================================================
 # Alert with Heading and Link (block DSL)
 # =============================================================================
-alert = ElementComponent::Components::Alert.new(context: :info) do
+alert = ElementComponent::Components::Alert.new(variant: :info) do
   add_content(ElementComponent::Components::AlertHeading.new.tap { |h| h.add_content("Information") })
   add_content("This is an important notice. ")
   add_content(ElementComponent::Components::AlertLink.new(href: "/details").tap { |l| l.add_content("View details") })
@@ -60,7 +60,7 @@ puts
 # =============================================================================
 # Dismissible Alert with Heading and Link
 # =============================================================================
-alert = ElementComponent::Components::Alert.new(context: :danger, dismissible: true) do
+alert = ElementComponent::Components::Alert.new(variant: :danger, dismissible: true) do
   add_content(ElementComponent::Components::AlertHeading.new.tap { |h| h.add_content("Error!") })
   add_content("Something went wrong. ")
   add_content(ElementComponent::Components::AlertLink.new(href: "/support").tap do |l|
@@ -74,7 +74,7 @@ puts
 # =============================================================================
 # Chained API Usage
 # =============================================================================
-alert = ElementComponent::Components::Alert.new(context: :secondary)
+alert = ElementComponent::Components::Alert.new(variant: :secondary)
                                            .add_content("This alert was built using chained calls.")
 puts "=== Chained API ==="
 puts alert.render

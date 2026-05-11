@@ -7,13 +7,13 @@ require_relative "alert/close_button"
 module ElementComponent
   module Components
     class Alert < Element
-      VALID_CONTEXTS = %i[primary secondary success danger warning info light dark].freeze
+      VALID_VARIANTS = %i[primary secondary success danger warning info light dark].freeze
 
-      def initialize(context: :primary, dismissible: false, **attributes, &block)
+      def initialize(variant: :primary, dismissible: false, **attributes, &block)
         super("div", &block)
 
         add_attribute(class: "alert")
-        add_attribute(class: "alert-#{context}")
+        add_attribute(class: "alert-#{variant}")
         add_attribute(class: "alert-dismissible") if dismissible
         add_attribute(role: "alert")
 
