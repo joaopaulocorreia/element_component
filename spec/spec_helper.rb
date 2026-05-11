@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+if ENV["COVERAGE"]
+  require "simplecov"
+  SimpleCov.start do
+    add_filter "/spec/"
+    enable_coverage :branch
+    minimum_coverage 90
+    minimum_coverage_by_file 80
+  end
+end
+
 require "element_component"
 
 RSpec.configure do |config|
