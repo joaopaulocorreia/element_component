@@ -33,7 +33,7 @@ module ElementComponent
           btn = Element.new("button", "aria-expanded": "false", "data-bs-toggle": "dropdown",
                                       class: "btn btn-#{variant} dropdown-toggle", type: "button", **btn_attributes)
           btn.add_content(label) if label
-          instance_eval(&block) if block
+          block&.call(self)
           add_content(btn)
         end
         self

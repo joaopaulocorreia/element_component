@@ -11,7 +11,7 @@ module ElementComponent
 
       add_attribute!(attribute)
       reset_contents!
-      instance_eval(&block) if block
+      block&.call(self)
     end
 
     def add_content!(content)
@@ -105,7 +105,7 @@ module ElementComponent
         in Element
           content.render
         in Proc
-          result = instance_eval(&content)
+          result = content.call(self)
           if result.equal?(self)
             ""
           elsif result.respond_to?(:render)
