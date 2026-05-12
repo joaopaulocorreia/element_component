@@ -80,6 +80,11 @@ div.add_content { |e| e.new_element("em") { |em| em.add_content("deferred") } }
 
 puts div.render
 # => <div>plain text<span>nested</span><em>deferred</em></div>
+
+# Array of content
+div.add_content(["Hello ", ElementComponent::Element.new("strong") { |s| s.add_content("World") }, "!"])
+puts div.render
+# => <div>Hello <strong>World</strong>!</div>
 ```
 
 ### Attribute Management

@@ -14,15 +14,17 @@ module ElementComponent
       block&.call(self)
     end
 
-    def add_content!(content)
+    def add_content!(content = nil, &)
       reset_contents!
 
-      add_content(content)
+      add_content(content, &)
     end
 
     def add_content(content = nil, &block)
       if block_given?
         @contents.push(block)
+      elsif content.is_a?(Array)
+        @contents.push(*content)
       else
         @contents.push(content)
       end

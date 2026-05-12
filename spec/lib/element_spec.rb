@@ -135,6 +135,23 @@ RSpec.describe ElementComponent::Element do
     end
   end
 
+  describe "Add array of contents to element" do
+    before { subject.add_content(["item 1", "item 2", "item 3"]) }
+
+    it { expect(subject.contents.count).to eq(3) }
+    it { expect(subject.contents).to eq(["item 1", "item 2", "item 3"]) }
+    it { expect(subject.render).to eq("<p>item 1item 2item 3</p>") }
+  end
+
+  describe "Add array with mixed content types" do
+    before do
+      subject.add_content(["text", ElementComponent::Element.new("span") { |s| s.add_content("nested") }])
+    end
+
+    it { expect(subject.contents.count).to eq(2) }
+    it { expect(subject.render).to eq("<p>text<span>nested</span></p>") }
+  end
+
   describe "Add attribute to element" do
     before { subject.add_attribute(class: "margin") }
 
