@@ -177,4 +177,43 @@ RSpec.describe ElementComponent::Element do
       it { expect(subject.render).to eq('<p class="padding"></p>') }
     end
   end
+
+  describe "Element with content argument" do
+    context "simple content" do
+      subject { ElementComponent::Element.new("p", "Hello World") }
+
+      it { expect(subject.contents).to eq(["Hello World"]) }
+      it { expect(subject.render).to eq("<p>Hello World</p>") }
+    end
+
+    context "content as array" do
+      subject { ElementComponent::Element.new("div", ["item 1", "item 2", "item 3"]) }
+
+      it { expect(subject.contents.count).to eq(3) }
+      it { expect(subject.contents).to eq(["item 1", "item 2", "item 3"]) }
+      it { expect(subject.render).to eq("<div>item 1item 2item 3</div>") }
+    end
+
+    context "content with attributes" do
+      subject { ElementComponent::Element.new("span", "text", class: "container") }
+
+      it { expect(subject.contents).to eq(["text"]) }
+      it { expect(subject.attributes).to eq({ class: ["container"] }) }
+      it { expect(subject.render).to eq('<span class="container">text</span>') }
+    end
+
+    context "content with block" do
+      subject { ElementComponent::Element.new("div", "antes") { |e| e.add_content("depois") } }
+
+      it { expect(subject.contents).to eq(%w[antes depois]) }
+      it { expect(subject.render).to eq("<div>antesdepois</div>") }
+    end
+
+    context "nil content" do
+      subject { ElementComponent::Element.new("br", nil, closing_tag: false) }
+
+      it { expect(subject.contents).to eq([]) }
+      it { expect(subject.render).to eq("<br>") }
+    end
+  end
 end
