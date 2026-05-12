@@ -12,6 +12,7 @@ lib/
     version.rb                      # VERSION constant
     element.rb                      # Core Element class
     components.rb                   # Component index, requires all components
+    aliases.rb                      # Namespace aliases and shortcuts
     components/
       alert.rb                      # Alert component
       alert/
@@ -76,6 +77,7 @@ spec/
   element_component_spec.rb         # Version check
   lib/
     element_spec.rb                 # Element unit tests
+    aliases_spec.rb                 # Namespace aliases tests
     components/
       alert_spec.rb                 # Alert component tests
       badge_spec.rb                 # Badge component tests
@@ -99,18 +101,56 @@ examples/
   alert_example.rb                  # Complete Alert usage examples
 ```
 
+## Namespace Aliases
+
+All components and the Element class can be accessed in multiple ways to reduce verbosity:
+
+### 1. Direct aliases (recommended)
+```ruby
+ElementComponent::Card.new("content")
+ElementComponent::Alert.new("message", variant: :success)
+ElementComponent::E.new("div", "content")
+```
+
+### 2. Short module alias
+```ruby
+EC::Card.new("content")
+EC::E.new("span", "text")
+```
+
+### 3. Helper method for generic elements
+```ruby
+ElementComponent.tag("div", "content", class: "container")
+ElementComponent.tag("div") { |e| e.add_content("block") }
+```
+
+### 4. View shortcuts (include in views/helpers)
+```ruby
+class MyView
+  include ElementComponent::Shortcuts
+
+  def render
+    Card.new("content")
+    E.new("span", "text")
+    tag("div", "content")
+  end
+end
+```
+
+**All 48 components are available** via all four access patterns above.
+
 ## Core Classes
 
-### `ElementComponent::Element`
+### `ElementComponent::Element` (alias: `ElementComponent::E`)
 - **Attributes**: `element` (tag name), `attributes` (Hash), `contents` (Array), `html` (rendered output)
-- **Constructor**: `Element.new(tag_name, closing_tag: true, **attributes)`
+- **Constructor**: `Element.new(tag_name, content = nil, closing_tag: true, **attributes, &block)`
 - **Content methods**: `add_content`, `add_content!`, `add_content(&block)` — `content` can be a single value or an Array of values
 - **Attribute methods**: `add_attribute`, `add_attribute!`, `remove_attribute`, `remove_attribute_value`
 - **Render**: `render` (with hooks: `before_render`, `after_render`, `around_render`)
 
 ### Pre-built Components
 
-Components live under `ElementComponent::Components`. Each component folder contains the main class and its sub-components in separate files.
+Components live under `ElementComponent::Components` (alias: `EC`). Direct aliases are also available under `ElementComponent::`.
 
 | Component | Class | Tag | Key Options |
 |---|---|---|---|
@@ -132,7 +172,8 @@ Components live under `ElementComponent::Components`. Each component folder cont
 | Spinner | `Spinner` | `<div>` | `type` (border/grow), `variant` |
 | Table | `Table` | `<table>` | `striped`, `bordered`, `hover`, `small`, `variant` |
 
-**Alert constructor**: `Alert.new(variant: :primary, dismissible: false, **attributes, &block)`
+**Alert constructor**: `Alert.new(content = nil, variant: :primary, dismissible: false, **attributes, &block)`
+- `content`: optional content string or array, added before block content
 - `variant`: one of `:primary`, `:secondary`, `:success`, `:danger`, `:warning`, `:info`, `:light`, `:dark`
 - `dismissible`: adds `.alert-dismissible` class and appends a `CloseButton`
 - `&block`: block with element parameter for adding content inside the element
@@ -140,18 +181,61 @@ Components live under `ElementComponent::Components`. Each component folder cont
 **Component guidelines**:
 - Always use `add_attribute()` instead of manipulating the `attributes` hash directly
 - Each class in its own file under a component-named folder
-- Call `super("tag_name", closing_tag: ..., &block)` first, then chain `add_attribute` calls
-- `block.call(self)` lives in `Element#initialize` — passes element to block via block parameter
+- **Constructor pattern**: `def initialize(content = nil, **keyword_args, **attributes, &block)`
+- Call `super("tag_name", &block)` first, then chain `add_attribute` calls, then `add_content(content) if content`
+- Content from the `content` argument is added **before** block content
 - Pass user attributes last via `add_attribute(attributes)`
 
-### Sub-component example pattern:
+### Component constructor pattern:
 
 ```ruby
 class AlertHeading < Element
-  def initialize(**attributes, &block)
-    super("h4", &block)
+  def initialize(content = nil, **attributes)
+    super("h4")
     add_attribute(class: "alert-heading")
-    add_attribute(attributes)
+    add_attribute(attributes) unless attributes.empty?
+    add_content(content) if content
+  end
+end
+```
+
+### Components with internal content (e.g., Alert, ModalHeader):
+
+```ruby
+class Alert < Element
+  def initialize(content = nil, variant: :primary, dismissible: false, **attributes, &block)
+    super("div", &block)
+
+    add_attribute(class: "alert")
+    add_attribute(class: "alert-\#{variant}")
+    add_attribute(class: "alert-dismissible") if dismissible
+    add_attribute(role: "alert")
+
+    add_attribute(attributes) unless attributes.empty?
+    add_content(content) if content              # user content first
+    add_content(AlertCloseButton.new) if dismissible  # internal content after
+  end
+end
+```
+
+### Components with conditional tag names (e.g., Button, ListGroupItem):
+
+```ruby
+class Button < Element
+  def initialize(content = nil, variant: :primary, outline: false, size: nil, href: nil, **attributes, &block)
+    if href
+      super("a", &block)
+      add_attribute(href: href)
+    else
+      super("button", &block)
+      add_attribute(type: "button")
+    end
+
+    add_attribute(class: "btn")
+    add_attribute(class: outline ? "btn-outline-\#{variant}" : "btn-\#{variant}")
+    add_attribute(class: "btn-\#{size}") if size
+    add_attribute(attributes) unless attributes.empty?
+    add_content(content) if content
   end
 end
 ```
@@ -184,6 +268,7 @@ ruby examples/alert_example.rb  # Run Alert examples
 - Test render output as raw HTML strings
 - Test attribute hashes directly
 - Follow existing describe/context/it structure
+- Test new aliases in `spec/lib/aliases_spec.rb`
 
 ## Development Workflow
 
@@ -202,6 +287,13 @@ ruby examples/alert_example.rb  # Run Alert examples
 - Hooks (`before_render`, `after_render`, `around_render`) are optional, detected via `respond_to?`
 - Self-closing tags controlled by `closing_tag:` parameter
 - Component classes use `add_attribute()` instead of direct hash manipulation
+- `content` as first positional argument in all constructors (optional, default `nil`)
+- Content argument is added before block content when both are provided
+- All 48 components are aliased directly under `ElementComponent::` for convenience
+- `ElementComponent::E` is an alias for `ElementComponent::Element`
+- `ElementComponent::EC` is an alias for `ElementComponent::Components`
+- `ElementComponent.tag()` is a helper method for creating generic elements
+- `ElementComponent::Shortcuts` module provides instance methods for use in views/helpers
 
 ## Roadmap Features (from README)
 - Caching support
