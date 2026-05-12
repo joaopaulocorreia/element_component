@@ -110,7 +110,7 @@ module ElementComponent
     def PageItem(...) = ElementComponent::PageItem.new(...)
     def ProgressBar(...) = ElementComponent::ProgressBar.new(...)
     def E(...) = ElementComponent::E.new(...)
-    def tag(...) = ElementComponent.tag(...)
+    def element_tag(...) = ElementComponent.tag(...)
   end
   # rubocop:enable Naming/MethodName
 end

@@ -153,9 +153,9 @@ RSpec.describe "ElementComponent aliases" do
       expect(element.render).to eq("<div>text</div>")
     end
 
-    it "creates element via tag shortcut" do
+    it "creates element via element_tag shortcut" do
       helper = helper_class.new
-      element = helper.tag("span", "text")
+      element = helper.element_tag("span", "text")
       expect(element.render).to eq("<span>text</span>")
     end
 
