@@ -13,6 +13,18 @@ RSpec.describe "ElementComponent aliases" do
     end
   end
 
+  describe "global E alias" do
+    it "creates an element at global scope" do
+      element = E.new("div", "content")
+      expect(element.render).to eq("<div>content</div>")
+    end
+
+    it "creates an element with attributes at global scope" do
+      element = E.new("span", "text", class: "highlight")
+      expect(element.render).to eq('<span class="highlight">text</span>')
+    end
+  end
+
   describe "tag helper" do
     it "creates an element" do
       element = ElementComponent.tag("div", "content")
@@ -44,6 +56,28 @@ RSpec.describe "ElementComponent aliases" do
     it "creates a Button" do
       button = ElementComponent::EC::Button.new("Click", variant: :primary)
       expect(button.render).to eq('<button type="button" class="btn btn-primary">Click</button>')
+    end
+  end
+
+  describe "global EC alias" do
+    it "creates a Card at global scope" do
+      card = EC::Card.new("content")
+      expect(card.render).to eq('<div class="card">content</div>')
+    end
+
+    it "creates a Button at global scope" do
+      button = EC::Button.new("Click", variant: :primary)
+      expect(button.render).to eq('<button type="button" class="btn btn-primary">Click</button>')
+    end
+
+    it "creates an Alert at global scope" do
+      alert = EC::Alert.new("message", variant: :success)
+      expect(alert.render).to include("alert-success")
+    end
+
+    it "creates a Spinner at global scope" do
+      spinner = EC::Spinner.new
+      expect(spinner.render).to eq('<div class="spinner-border" role="status"></div>')
     end
   end
 

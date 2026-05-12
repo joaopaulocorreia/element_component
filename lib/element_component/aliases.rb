@@ -114,3 +114,7 @@ module ElementComponent
   end
   # rubocop:enable Naming/MethodName
 end
+
+# Global aliases for convenience
+EC = ElementComponent::Components
+E = ElementComponent::Element
