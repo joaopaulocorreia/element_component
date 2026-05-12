@@ -3,7 +3,7 @@
 module ElementComponent
   module Components
     class BreadcrumbItem < Element
-      def initialize(href: nil, active: false, **attributes, &block)
+      def initialize(content = nil, href: nil, active: false, **attributes, &block)
         super("li", &block)
 
         add_attribute(class: "breadcrumb-item")
@@ -12,6 +12,7 @@ module ElementComponent
         add_attribute(attributes) unless attributes.empty?
 
         @href = href
+        add_content(content) if content
       end
 
       private

@@ -6,7 +6,7 @@ module ElementComponent
       VALID_VARIANTS = %i[primary secondary success danger warning info light dark link].freeze
       VALID_SIZES = %i[sm lg].freeze
 
-      def initialize(variant: :primary, outline: false, size: nil, href: nil, **attributes, &block)
+      def initialize(content = nil, variant: :primary, outline: false, size: nil, href: nil, **attributes, &block)
         if href
           super("a", &block)
           add_attribute(href: href)
@@ -19,6 +19,7 @@ module ElementComponent
         add_attribute(class: outline ? "btn-outline-#{variant}" : "btn-#{variant}")
         add_attribute(class: "btn-#{size}") if size
         add_attribute(attributes) unless attributes.empty?
+        add_content(content) if content
       end
     end
   end

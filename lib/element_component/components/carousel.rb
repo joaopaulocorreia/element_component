@@ -6,7 +6,7 @@ require_relative "carousel/caption"
 module ElementComponent
   module Components
     class Carousel < Element
-      def initialize(id: "carousel", fade: false, indicators: true, controls: true, **attributes, &block)
+      def initialize(content = nil, id: "carousel", fade: false, indicators: true, controls: true, **attributes, &block)
         @carousel_id = id
         @show_indicators = indicators
         @show_controls = controls
@@ -17,6 +17,7 @@ module ElementComponent
         add_attribute(class: "slide")
         add_attribute(class: "carousel-fade") if fade
         add_attribute(attributes) unless attributes.empty?
+        add_content(content) if content
       end
 
       private

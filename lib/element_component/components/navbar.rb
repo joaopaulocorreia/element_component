@@ -13,7 +13,7 @@ module ElementComponent
       VALID_FIXED = %i[top bottom].freeze
       VALID_STICKY = %i[top bottom].freeze
 
-      def initialize(expand: :lg, theme: :light, background: nil, fixed: nil, sticky: nil, container: true, **attributes,
+      def initialize(content = nil, expand: :lg, theme: :light, background: nil, fixed: nil, sticky: nil, container: true, **attributes,
                      &block)
         super("nav", &block)
 
@@ -26,6 +26,7 @@ module ElementComponent
         add_attribute(attributes) unless attributes.empty?
 
         @use_container = container
+        add_content(content) if content
       end
 
       private

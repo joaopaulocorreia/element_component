@@ -7,12 +7,13 @@ module ElementComponent
     class Pagination < Element
       VALID_SIZES = %i[sm lg].freeze
 
-      def initialize(size: nil, **attributes, &block)
+      def initialize(content = nil, size: nil, **attributes, &block)
         @pagination_size = size
         super("nav", &block)
 
         add_attribute("aria-label": "Pagination")
         add_attribute(attributes) unless attributes.empty?
+        add_content(content) if content
       end
 
       private

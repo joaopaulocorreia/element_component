@@ -3,7 +3,7 @@
 module ElementComponent
   module Components
     class PageItem < Element
-      def initialize(active: false, disabled: false, href: "#", **attributes, &block)
+      def initialize(content = nil, active: false, disabled: false, href: "#", **attributes, &block)
         super("li", &block)
 
         add_attribute(class: "page-item")
@@ -14,6 +14,7 @@ module ElementComponent
 
         @page_href = href
         @page_disabled = disabled
+        add_content(content) if content
       end
 
       private

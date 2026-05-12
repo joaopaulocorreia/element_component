@@ -3,11 +3,12 @@
 module ElementComponent
   module Components
     class DropdownHeader < Element
-      def initialize(**attributes, &)
+      def initialize(content = nil, **attributes, &)
         super("li", &)
 
         inner = Element.new("h6", class: "dropdown-header", **attributes)
         @inner_header = inner
+        add_content(content) if content
       end
 
       private

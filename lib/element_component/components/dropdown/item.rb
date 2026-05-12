@@ -5,7 +5,7 @@ module ElementComponent
     class DropdownItem < Element
       VALID_TYPES = %i[button link].freeze
 
-      def initialize(type: :link, href: "#", active: false, disabled: false, **attributes, &block)
+      def initialize(content = nil, type: :link, href: "#", active: false, disabled: false, **attributes, &block)
         tag = type == :button ? "button" : "a"
         super("li", &block)
 
@@ -19,6 +19,7 @@ module ElementComponent
         inner.add_content(&block) if block
 
         @inner_item = inner
+        add_content(content) if content
       end
 
       private

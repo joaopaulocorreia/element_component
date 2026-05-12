@@ -5,11 +5,12 @@ require_relative "breadcrumb/item"
 module ElementComponent
   module Components
     class Breadcrumb < Element
-      def initialize(**attributes, &)
+      def initialize(content = nil, **attributes, &)
         super("nav", &)
 
         add_attribute("aria-label": "breadcrumb")
         add_attribute(attributes) unless attributes.empty?
+        add_content(content) if content
       end
 
       def build

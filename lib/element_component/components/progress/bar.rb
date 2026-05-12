@@ -5,7 +5,7 @@ module ElementComponent
     class ProgressBar < Element
       VALID_VARIANTS = %i[primary secondary success danger warning info light dark].freeze
 
-      def initialize(value: 0, variant: nil, striped: false, animated: false, **attributes, &block)
+      def initialize(content = nil, value: 0, variant: nil, striped: false, animated: false, **attributes, &block)
         super("div", &block)
 
         add_attribute(class: "progress-bar")
@@ -18,6 +18,7 @@ module ElementComponent
         add_attribute("aria-valuemax": "100")
         add_attribute(style: "width: #{value}%")
         add_attribute(attributes) unless attributes.empty?
+        add_content(content) if content
       end
     end
   end

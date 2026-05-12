@@ -10,12 +10,13 @@ module ElementComponent
     class Dropdown < Element
       VALID_DIRECTIONS = %i[dropup dropend dropstart].freeze
 
-      def initialize(direction: nil, **attributes, &block)
+      def initialize(content = nil, direction: nil, **attributes, &block)
         super("div", &block)
 
         add_attribute(class: "dropdown")
         add_attribute(class: direction.to_s) if direction
         add_attribute(attributes) unless attributes.empty?
+        add_content(content) if content
       end
 
       def toggle_button(label: "Dropdown", variant: :secondary, split: false, **btn_attributes, &block)

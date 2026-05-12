@@ -5,7 +5,7 @@ module ElementComponent
     class ListGroupItem < Element
       VALID_VARIANTS = %i[primary secondary success danger warning info light dark].freeze
 
-      def initialize(variant: nil, active: false, disabled: false, href: nil, **attributes, &block)
+      def initialize(content = nil, variant: nil, active: false, disabled: false, href: nil, **attributes, &block)
         tag = href ? "a" : "li"
         super(tag, &block)
 
@@ -17,6 +17,7 @@ module ElementComponent
         add_attribute(href: href) if href
         add_attribute("aria-current": "true") if active
         add_attribute(attributes) unless attributes.empty?
+        add_content(content) if content
       end
     end
   end

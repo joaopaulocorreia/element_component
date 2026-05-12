@@ -8,7 +8,7 @@ module ElementComponent
     class Nav < Element
       VALID_TYPES = %i[tabs pills underline].freeze
 
-      def initialize(type: nil, fill: false, justified: false, vertical: false, **attributes, &block)
+      def initialize(content = nil, type: nil, fill: false, justified: false, vertical: false, **attributes, &block)
         super("ul", &block)
 
         add_attribute(class: "nav")
@@ -17,6 +17,7 @@ module ElementComponent
         add_attribute(class: "nav-justified") if justified
         add_attribute(class: "flex-column") if vertical
         add_attribute(attributes) unless attributes.empty?
+        add_content(content) if content
       end
     end
   end
