@@ -40,6 +40,8 @@ module ElementComponent
     end
 
     def add_attribute(hash_attr)
+      return self unless hash_attr.is_a?(Hash) && hash_attr.any?
+
       hash_attr.each do |attr, value|
         @attributes[attr] = [] unless @attributes.key?(attr)
         resolve_attribute_values(value, attr).each { |v| @attributes[attr].push(v) }
