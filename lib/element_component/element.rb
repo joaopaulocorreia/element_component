@@ -100,10 +100,6 @@ module ElementComponent
 
     def render_in(*) = render
 
-    def format_html(indent: 2)
-      ElementComponent.format_html(render, indent: indent)
-    end
-
     def cache(key = nil, expires_in: nil)
       @cache_enabled = true
       @cache_key = key
