@@ -11,7 +11,6 @@ lib/
   element_component/
     version.rb                      # VERSION constant
     safe_string.rb                  # SafeString class (html_safe wrapper)
-    debug.rb                        # Debugger class (trace/log/info)
     element.rb                      # Core Element class (escaping, caching, render)
     components.rb                   # Component index, requires all components
     aliases.rb                      # Namespace aliases and shortcuts
@@ -81,7 +80,6 @@ spec/
   spec_helper.rb                    # RSpec config
   lib/
     element_spec.rb                 # Element unit tests
-    debug_spec.rb                   # Debugger and debug integration tests
     aliases_spec.rb                 # Namespace aliases tests
     components/
       alert_spec.rb                 # Alert component tests
@@ -300,7 +298,6 @@ ruby examples/alert_example.rb  # Run Alert examples
 - **No double-escape**: `Element#render` returns `SafeString`, so nested Elements are never re-escaped
 - **Caching**: In-memory by default; uses `Rails.cache` when available. Enable via `element.cache`
 - **Rails Helpers**: Optional `RailsHelpers` module with `method_missing` delegation to `view_context`
-- **Debug System**: Per-instance (`element.debug_mode!`) or global (`ElementComponent.debug = true`). Logs events to stdout and stores trace in `element.debug_info[:debug_events]`. Categories: init, content, attribute, render, build, opening_tag, closing_tag, mount_attrs, mount_content, content_type, escape, wrap_content, cache, hook.
 - `ElementComponent::E` is an alias for `ElementComponent::Element`
 - `ElementComponent::EC` is an alias for `ElementComponent::Components`
 - `ElementComponent.tag()` is a helper method for creating generic elements

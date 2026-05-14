@@ -147,43 +147,6 @@ puts el.render
 # => <p><b>bold</b></p>
 ```
 
-### Debug Mode
-
-Trace every operation inside an element — rendering steps, attribute changes, content additions, cache hits/misses, and escape decisions.
-
-**Per-instance:**
-
-```ruby
-el = ElementComponent::Element.new("div")
-el.debug_mode!
-el.add_content("hello")
-el.add_attribute(class: "box")
-el.render
-# stdout:
-# [  CONTENT] [div] add_content ["hello"]
-# [ATTRIBUTE] [div] class="box"
-# [   RENDER] [div] render START
-# ...
-
-el.debug_info
-# => { element: "div", attributes: {...}, contents: [...], debug_events: [...] }
-```
-
-**Global:**
-
-```ruby
-ElementComponent.debug = true   # all elements trace to stdout
-ElementComponent.debug = false  # disable
-
-# Via env var:
-# ELEMENT_COMPONENT_DEBUG=true bundle exec ruby app.rb
-```
-
-**Categories logged:**
-
-`init`, `content`, `attribute`, `render`, `build`, `opening_tag`, `closing_tag`,
-`mount_attrs`, `mount_content`, `content_type`, `escape`, `wrap_content`, `cache`, `hook`
-
 ### Caching
 
 Cache rendered output to avoid re-rendering:
