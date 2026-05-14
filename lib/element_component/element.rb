@@ -34,6 +34,11 @@ module ElementComponent
       add_attribute(hash_attr)
     end
 
+    def <<(content)
+      add_content(content)
+      self
+    end
+
     def add_attribute(hash_attr)
       hash_attr.each do |attr, value|
         @attributes[attr] = [] unless @attributes.key?(attr)
@@ -149,9 +154,9 @@ module ElementComponent
         when Element
           c.render
         when Proc
-          buffer = []
-          c.call(buffer)
-          render_content(buffer)
+          fragment = Element.new(:fragment, closing_tag: false)
+          c.call(fragment)
+          render_content(fragment.contents)
         when SafeString
           c.to_s
         else
