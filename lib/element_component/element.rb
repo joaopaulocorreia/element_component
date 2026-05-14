@@ -24,7 +24,7 @@ module ElementComponent
 
     def add_content(content = nil, &block)
       @contents.push(*Array(content)) if content
-      @contents.push(block) if block_given?
+      block.call(self) if block_given?
 
       self
     end
@@ -153,10 +153,6 @@ module ElementComponent
         case c
         when Element
           c.render
-        when Proc
-          fragment = Element.new(:fragment, closing_tag: false)
-          c.call(fragment)
-          render_content(fragment.contents)
         when SafeString
           c.to_s
         else

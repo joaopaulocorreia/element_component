@@ -62,8 +62,8 @@ RSpec.describe ElementComponent::Element do
   describe "Element with block content" do
     subject { ElementComponent::Element.new("div") { |b| b << "block content" } }
 
-    it "stores block as Proc in contents" do
-      expect(subject.contents.first).to be_a(Proc)
+    it "resolves block content immediately" do
+      expect(subject.contents).to eq(["block content"])
     end
 
     it "renders block content in HTML" do
@@ -206,7 +206,7 @@ RSpec.describe ElementComponent::Element do
       subject { ElementComponent::Element.new("div", "antes") { |b| b << "depois" } }
 
       it { expect(subject.contents.first).to eq("antes") }
-      it { expect(subject.contents.last).to be_a(Proc) }
+      it { expect(subject.contents.last).to eq("depois") }
       it { expect(subject.render).to eq("<div>antesdepois</div>") }
     end
 
