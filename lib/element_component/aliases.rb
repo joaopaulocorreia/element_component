@@ -12,6 +12,7 @@ module ElementComponent
   Alert = Components::Alert
   Badge = Components::Badge
   Breadcrumb = Components::Breadcrumb
+  BreadcrumbList = Components::BreadcrumbList
   Button = Components::Button
   ButtonGroup = Components::ButtonGroup
   Card = Components::Card
@@ -67,6 +68,7 @@ module ElementComponent
     def Button(...) = ElementComponent::Button.new(...)
     def ButtonGroup(...) = ElementComponent::ButtonGroup.new(...)
     def Breadcrumb(...) = ElementComponent::Breadcrumb.new(...)
+    def BreadcrumbList(...) = ElementComponent::BreadcrumbList.new(...)
     def Carousel(...) = ElementComponent::Carousel.new(...)
     def CloseButton(...) = ElementComponent::CloseButton.new(...)
     def Dropdown(...) = ElementComponent::Dropdown.new(...)

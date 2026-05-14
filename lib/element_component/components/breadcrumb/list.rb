@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "breadcrumb/item"
-require_relative "breadcrumb/list"
-
 module ElementComponent
   module Components
-    class Breadcrumb < Element
+    class BreadcrumbList < Element
       def initialize(content = nil, **attributes, &)
-        super("nav", &)
-
-        add_attribute("aria-label": "breadcrumb")
+        super("ol", &)
+        add_attribute(class: "breadcrumb")
         add_attribute(attributes) unless attributes.empty?
-        add_content(content)
+        add_content(content) if content
       end
     end
   end

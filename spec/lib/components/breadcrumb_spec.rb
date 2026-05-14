@@ -2,7 +2,7 @@
 
 RSpec.describe ElementComponent::Components::Breadcrumb do
   describe "default breadcrumb" do
-    subject { ElementComponent::Components::Breadcrumb.new }
+    subject { described_class.new }
 
     it "has the correct element name" do
       expect(subject.element).to eq("nav")
@@ -13,7 +13,7 @@ RSpec.describe ElementComponent::Components::Breadcrumb do
     end
 
     it "renders empty breadcrumb" do
-      expect(subject.render).to eq('<nav aria-label="breadcrumb"><ol class="breadcrumb"></ol></nav>')
+      expect(subject.render).to eq('<nav aria-label="breadcrumb"></nav>')
     end
   end
 
@@ -59,11 +59,13 @@ RSpec.describe ElementComponent::Components::Breadcrumb do
     end
   end
 
-  describe "breadcrumb with items" do
+  describe "breadcrumb with list and items" do
     subject do
-      ElementComponent::Components::Breadcrumb.new do |b|
-        b << ElementComponent::Components::BreadcrumbItem.new(href: "/") { |b2| b2 << "Home" }
-        b << ElementComponent::Components::BreadcrumbItem.new(active: true) { |b2| b2 << "Current" }
+      described_class.new do |b|
+        b << ElementComponent::Components::BreadcrumbList.new do |list|
+          list << ElementComponent::Components::BreadcrumbItem.new(href: "/") { |i| i << "Home" }
+          list << ElementComponent::Components::BreadcrumbItem.new(active: true) { |i| i << "Current" }
+        end
       end
     end
 

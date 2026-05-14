@@ -6,13 +6,14 @@ module ElementComponent
       def initialize(content = nil, href: nil, active: false, **attributes, &block)
         super("li", &block)
 
+        @href = href
+
+        add_content(content) if content
+
         add_attribute(class: "breadcrumb-item")
         add_attribute(class: "active") if active
         add_attribute("aria-current": "page") if active
         add_attribute(attributes) unless attributes.empty?
-
-        @href = href
-        add_content(content) if content
       end
 
       private
