@@ -24,7 +24,7 @@ module ElementComponent
 
       private
 
-      def mount_content
+      def mount_content(contents = @contents)
         inner = super
         @inner_item&.add_content(inner)
         "<li>#{@inner_item&.render || inner}</li>"

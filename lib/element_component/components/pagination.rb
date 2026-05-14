@@ -19,14 +19,13 @@ module ElementComponent
       private
 
       def build
-        @html << "<#{@element}"
-        @html << (mount_attributes.empty? ? ">" : " #{mount_attributes}>")
+        @html << opening_tag
         @html << "<ul class=\"pagination"
         @html << " pagination-#{@pagination_size}" if @pagination_size
         @html << "\">"
-        @html << mount_content
+        @html << mount_content(contents)
         @html << "</ul>"
-        @html << "</#{@element}>" if @closing_tag
+        @html << closing_tag
         @html
       end
     end

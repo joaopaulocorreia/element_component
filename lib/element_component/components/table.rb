@@ -5,7 +5,8 @@ module ElementComponent
     class Table < Element
       VALID_VARIANTS = %i[primary secondary success danger warning info light dark].freeze
 
-      def initialize(content = nil, striped: false, bordered: false, hover: false, small: false, variant: nil, **attributes, &block)
+      def initialize(content = nil, striped: false, bordered: false, hover: false, small: false, variant: nil,
+                     **attributes, &block)
         super("table", &block)
 
         add_attribute(class: "table")

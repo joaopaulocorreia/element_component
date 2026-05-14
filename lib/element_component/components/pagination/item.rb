@@ -19,8 +19,7 @@ module ElementComponent
 
       private
 
-      def mount_content
-        inner = super
+      def wrap_content(inner, _contents)
         "<a class=\"page-link\" href=\"#{@page_href}\"#{' tabindex="-1"' if @page_disabled}>#{inner}</a>"
       end
     end

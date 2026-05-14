@@ -31,9 +31,17 @@ module ElementComponent
 
       def build_indicators
         html = +""
-        contents.each_with_index do |item, index|
-          next unless item.is_a?(CarouselItem)
-
+        items = @contents.flat_map do |c|
+          if c.is_a?(Proc)
+            (buf = []
+             c.call(buf)
+             buf)
+          else
+            [c]
+          end
+        end
+        items = items.grep(CarouselItem)
+        items.each_with_index do |item, index|
           active = item.attributes[:class]&.include?("active") || index.zero?
           html << indicator_button(index, active)
         end
@@ -49,13 +57,12 @@ module ElementComponent
       end
 
       def build
-        @html << "<#{@element}"
-        @html << (mount_attributes.empty? ? ">" : " #{mount_attributes}>")
+        @html << opening_tag
 
         @html << "<div class=\"carousel-indicators\">#{build_indicators}</div>" if @show_indicators
 
         @html << "<div class=\"carousel-inner\">"
-        @html << mount_content
+        @html << mount_content(contents)
         @html << "</div>"
 
         if @show_controls
@@ -63,7 +70,7 @@ module ElementComponent
           @html << control_button("next", "Next")
         end
 
-        @html << "</#{@element}>" if @closing_tag
+        @html << closing_tag
         @html
       end
     end

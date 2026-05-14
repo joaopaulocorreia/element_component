@@ -31,10 +31,9 @@ module ElementComponent
       private
 
       def build
-        @html << "<#{@element}"
-        @html << (mount_attributes.empty? ? ">" : " #{mount_attributes}>")
-        @html << mount_content
-        @html << "</#{@element}>" if @closing_tag
+        @html << opening_tag
+        @html << mount_content(contents)
+        @html << closing_tag
         @html
       end
     end

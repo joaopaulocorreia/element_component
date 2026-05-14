@@ -6,7 +6,8 @@ module ElementComponent
       VALID_SIZES = %i[sm lg xl].freeze
       VALID_FULLSCREEN = %i[always sm md lg xl xxl].freeze
 
-      def initialize(content = nil, scrollable: false, centered: false, size: nil, fullscreen: nil, **attributes, &block)
+      def initialize(content = nil, scrollable: false, centered: false, size: nil, fullscreen: nil, **attributes,
+                     &block)
         super("div", &block)
 
         add_attribute(class: "modal-dialog")

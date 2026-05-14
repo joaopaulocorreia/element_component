@@ -14,12 +14,11 @@ module ElementComponent
       end
 
       def build
-        @html << "<#{@element}"
-        @html << (mount_attributes.empty? ? ">" : " #{mount_attributes}>")
+        @html << opening_tag
         @html << "<ol class=\"breadcrumb\">"
-        @html << mount_content
+        @html << mount_content(contents)
         @html << "</ol>"
-        @html << "</#{@element}>" if @closing_tag
+        @html << closing_tag
         @html
       end
     end

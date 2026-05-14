@@ -12,7 +12,7 @@ module ElementComponent
 
       private
 
-      def mount_content
+      def mount_content(_contents = nil)
         @inner_divider&.render || ""
       end
     end

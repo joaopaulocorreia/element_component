@@ -17,9 +17,8 @@ module ElementComponent
 
       private
 
-      def mount_content
-        inner = super
-        if @href && @contents.none?(Element)
+      def wrap_content(inner, contents)
+        if @href && contents.none?(Element)
           "<a href=\"#{@href}\">#{inner}</a>"
         else
           inner

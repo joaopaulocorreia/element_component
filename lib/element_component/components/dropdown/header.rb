@@ -13,7 +13,7 @@ module ElementComponent
 
       private
 
-      def mount_content
+      def mount_content(contents)
         inner = super
         @inner_header&.add_content(inner)
         "<li>#{@inner_header&.render}</li>"

@@ -32,19 +32,18 @@ module ElementComponent
       private
 
       def build
-        @html << "<#{@element}"
-        @html << (mount_attributes.empty? ? ">" : " #{mount_attributes}>")
+        @html << opening_tag
 
         if @use_container
           container_class = @use_container == true ? "container-fluid" : "container"
           @html << "<div class=\"#{container_class}\">"
         end
 
-        @html << mount_content
+        @html << mount_content(contents)
 
         @html << "</div>" if @use_container
 
-        @html << "</#{@element}>" if @closing_tag
+        @html << closing_tag
         @html
       end
     end
