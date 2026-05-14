@@ -12,6 +12,24 @@ Metrics/MethodLength:
 Metrics/BlockLength:
   Enabled: false
 
+Metrics/ParameterLists:
+  Max: 10
+
+Metrics/CyclomaticComplexity:
+  Max: 12
+
+Metrics/PerceivedComplexity:
+  Max: 12
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/ClassLength:
+  Max: 250
+
+Layout/LineLength:
+  Max: 140
+
 Style/MissingRespondToMissing:
   Enabled: false
 
