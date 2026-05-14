@@ -7,6 +7,9 @@ A lightweight and flexible HTML builder for Ruby. `ElementComponent` provides a 
 - **Object-Oriented HTML Construction** — Build HTML trees using Ruby objects with dynamic attribute management
 - **Block DSL** — Nest content inline with block parameters and the `new_element` helper
 - **Rendering Hooks** — `before_render`, `after_render`, and `around_render` callbacks for dynamic content
+- **HTML Escaping & XSS Protection** — Automatic escaping of string content; opt-out via `html_safe`
+- **Caching** — In-memory and `Rails.cache` support
+- **Rails Helpers** — Optional integration with `view_context` for access to `link_to`, routes, etc.
 - **17 Bootstrap 5 Components** — Ready-to-use Alert, Badge, Breadcrumb, Button, ButtonGroup, Card, Carousel, CloseButton, Dropdown, ListGroup, Modal, Nav, Navbar, Pagination, Progress, Spinner, and Table
 - **Chained API** — All `add_*` methods return `self` for method chaining
 - **Self-Closing Tags** — Support for void elements like `<img>`, `<input>`, `<br>`
@@ -123,6 +126,100 @@ div.define_singleton_method(:before_render) { add_attribute(class: "dynamic") }
 div.add_content("content")
 puts div.render
 # => <div class="dynamic">content</div>
+```
+
+### HTML Escaping & XSS Protection
+
+String content is automatically HTML-escaped. `<`, `>`, `&`, `"` become `&lt;`, `&gt;`, `&amp;`, `&quot;`:
+
+```ruby
+el = ElementComponent::Element.new("p")
+el.add_content("<script>alert('xss')</script>")
+puts el.render
+# => <p>&lt;script&gt;alert('xss')&lt;/script&gt;</p>
+```
+
+Use `ElementComponent.html_safe()` to mark content as safe (no escaping):
+
+```ruby
+el.add_content(ElementComponent.html_safe("<b>bold</b>"))
+puts el.render
+# => <p><b>bold</b></p>
+```
+
+### Debug Mode
+
+Trace every operation inside an element — rendering steps, attribute changes, content additions, cache hits/misses, and escape decisions.
+
+**Per-instance:**
+
+```ruby
+el = ElementComponent::Element.new("div")
+el.debug_mode!
+el.add_content("hello")
+el.add_attribute(class: "box")
+el.render
+# stdout:
+# [  CONTENT] [div] add_content ["hello"]
+# [ATTRIBUTE] [div] class="box"
+# [   RENDER] [div] render START
+# ...
+
+el.debug_info
+# => { element: "div", attributes: {...}, contents: [...], debug_events: [...] }
+```
+
+**Global:**
+
+```ruby
+ElementComponent.debug = true   # all elements trace to stdout
+ElementComponent.debug = false  # disable
+
+# Via env var:
+# ELEMENT_COMPONENT_DEBUG=true bundle exec ruby app.rb
+```
+
+**Categories logged:**
+
+`init`, `content`, `attribute`, `render`, `build`, `opening_tag`, `closing_tag`,
+`mount_attrs`, `mount_content`, `content_type`, `escape`, `wrap_content`, `cache`, `hook`
+
+### Caching
+
+Cache rendered output to avoid re-rendering:
+
+```ruby
+el = ElementComponent::Element.new("div")
+el.add_content(expensive_operation)
+el.cache                        # enable in-memory cache
+el.render                       # computes and caches
+el.render                       # returns cached HTML
+el.expire_cache!                # clear cache
+```
+
+With `Rails.cache` available, pass `expires_in`:
+
+```ruby
+el.cache(expires_in: 5.minutes) # uses Rails.cache when available
+```
+
+### Rails Helpers
+
+Integrate with Rails views by setting `view_context`:
+
+```ruby
+# In a controller or helper:
+component = ElementComponent::Alert.new(variant: :success)
+component.view_context = helpers
+component.add_content(component.link_to("Home", root_path))
+component.render
+# => <div class="alert alert-success" role="alert"><a href="/">Home</a></div>
+```
+
+All Rails helpers (`link_to`, `image_tag`, routes, etc.) are available via `method_missing` delegation. Include `ElementComponent::RailsHelpers` in your base class to enable globally:
+
+```ruby
+ElementComponent::Element.include(ElementComponent::RailsHelpers)
 ```
 
 ## Pre-built Components (Bootstrap 5)
@@ -509,7 +606,9 @@ Or push a version tag (e.g., `v0.6.0`) to trigger the automated release workflow
 
 ## Roadmap
 
-- [ ] Support for Caching
+- [x] HTML Escaping & XSS Protection
+- [x] Caching (in-memory + Rails.cache)
+- [x] Rails Helpers integration
 - [x] Pre-built Bootstrap components (Alert, Badge, Breadcrumb, Button, ButtonGroup, Card, Carousel, CloseButton, Dropdown, ListGroup, Modal, Nav, Navbar, Pagination, Progress, Spinner, Table)
 
 ## Contributing
