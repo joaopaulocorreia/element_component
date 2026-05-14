@@ -62,8 +62,8 @@ RSpec.describe ElementComponent::Components::Breadcrumb do
   describe "breadcrumb with items" do
     subject do
       ElementComponent::Components::Breadcrumb.new do |b|
-        b.add_content(ElementComponent::Components::BreadcrumbItem.new(href: "/") { |bi| bi.add_content("Home") })
-        b.add_content(ElementComponent::Components::BreadcrumbItem.new(active: true) { |bi| bi.add_content("Current") })
+        b << ElementComponent::Components::BreadcrumbItem.new(href: "/") { |b2| b2 << "Home" }
+        b << ElementComponent::Components::BreadcrumbItem.new(active: true) { |b2| b2 << "Current" }
       end
     end
 

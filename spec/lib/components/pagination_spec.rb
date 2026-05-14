@@ -63,8 +63,8 @@ RSpec.describe ElementComponent::Components::Pagination do
 
   describe "pagination with items" do
     subject do
-      ElementComponent::Components::Pagination.new do |p|
-        p.add_content(ElementComponent::Components::PageItem.new { |pi| pi.add_content("1") })
+      ElementComponent::Components::Pagination.new do |b|
+        b << ElementComponent::Components::PageItem.new { |b2| b2 << "1" }
       end
     end
 

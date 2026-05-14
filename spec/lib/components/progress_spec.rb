@@ -38,8 +38,7 @@ RSpec.describe ElementComponent::Components::Progress do
       end
 
       it "has style attribute" do
-        expect(subject.attributes[:style]).to include("width:")
-        expect(subject.attributes[:style]).to include("50%")
+        expect(subject.attributes[:style]).to eq(["width: 50%"])
       end
     end
 
@@ -60,8 +59,8 @@ RSpec.describe ElementComponent::Components::Progress do
 
   describe "progress with bar" do
     subject do
-      ElementComponent::Components::Progress.new do |p|
-        p.add_content(ElementComponent::Components::ProgressBar.new(value: 75, variant: :success))
+      ElementComponent::Components::Progress.new do |b|
+        b << ElementComponent::Components::ProgressBar.new(value: 75, variant: :success)
       end
     end
 

@@ -37,12 +37,12 @@ RSpec.describe "ElementComponent aliases" do
     end
 
     it "creates an element with block" do
-      element = ElementComponent.tag("div") { |e| e.add_content("block") }
+      element = ElementComponent.tag("div") { |b| b << "block" }
       expect(element.render).to eq("<div>block</div>")
     end
 
     it "creates an element with content and block" do
-      element = ElementComponent.tag("div", "before") { |e| e.add_content("after") }
+      element = ElementComponent.tag("div", "before") { |b| b << "after" }
       expect(element.render).to eq("<div>beforeafter</div>")
     end
   end

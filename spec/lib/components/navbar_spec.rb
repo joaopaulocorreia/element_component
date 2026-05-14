@@ -72,23 +72,23 @@ RSpec.describe ElementComponent::Components::Navbar do
 
     context "with brand and nav items" do
       let(:block) do
-        proc do |n|
-          n.add_content(ElementComponent::Components::NavbarBrand.new(href: "/") { |nb| nb.add_content("Brand") })
-          n.add_content(ElementComponent::Components::NavbarToggler.new(target: "navbarNav"))
-          n.add_content(ElementComponent::Components::NavbarCollapse.new(id: "navbarNav") do |nc|
-            nc.add_content(ElementComponent::Components::NavbarNav.new do |nn|
-              nn.add_content(ElementComponent::Components::NavItem.new do |ni|
-                ni.add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) do |nl|
-                  nl.add_content("Home")
-                end)
-              end)
-              nn.add_content(ElementComponent::Components::NavItem.new do |ni|
-                ni.add_content(ElementComponent::Components::NavLink.new(href: "/about") do |nl|
-                  nl.add_content("About")
-                end)
-              end)
-            end)
-          end)
+        proc do |b|
+          b << ElementComponent::Components::NavbarBrand.new(href: "/") { |b2| b2 << "Brand" }
+          b << ElementComponent::Components::NavbarToggler.new(target: "navbarNav")
+          b << ElementComponent::Components::NavbarCollapse.new(id: "navbarNav") do |nc|
+            nc << ElementComponent::Components::NavbarNav.new do |nn|
+              nn << ElementComponent::Components::NavItem.new do |ni|
+                ni << ElementComponent::Components::NavLink.new(href: "/", active: true) do |nl|
+                  nl << "Home"
+                end
+              end
+              nn << ElementComponent::Components::NavItem.new do |ni|
+                ni << ElementComponent::Components::NavLink.new(href: "/about") do |nl|
+                  nl << "About"
+                end
+              end
+            end
+          end
         end
       end
 

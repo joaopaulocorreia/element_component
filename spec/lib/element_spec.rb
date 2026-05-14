@@ -60,10 +60,10 @@ RSpec.describe ElementComponent::Element do
   end
 
   describe "Element with block content" do
-    subject { ElementComponent::Element.new("div") { |e| e.add_content("block content") } }
+    subject { ElementComponent::Element.new("div") { |b| b << "block content" } }
 
-    it "renders content from block" do
-      expect(subject.contents).to eq(["block content"])
+    it "stores block as Proc in contents" do
+      expect(subject.contents.first).to be_a(Proc)
     end
 
     it "renders block content in HTML" do
@@ -74,62 +74,62 @@ RSpec.describe ElementComponent::Element do
   describe "Element with Proc content via add_content(&block)" do
     it "renders new_element inside a Proc" do
       element = ElementComponent::Element.new("div")
-      element.add_content { |e| e.new_element("p") }
+      element.add_content { |b| b << ElementComponent::Element.new("p") }
       expect(element.render).to eq("<div><p></p></div>")
     end
 
     it "renders new_element with content inside a Proc" do
       element = ElementComponent::Element.new("div")
-      element.add_content { |e| e.new_element("span").tap { |s| s.add_content("text") } }
+      element.add_content { |b| b << ElementComponent::Element.new("span") { |b2| b2 << "text" } }
       expect(element.render).to eq("<div><span>text</span></div>")
     end
 
-    it "renders Proc returning string" do
+    it "renders Proc pushing string to buffer" do
       element = ElementComponent::Element.new("div")
-      element.add_content { "string from proc" }
+      element.add_content { |b| b << "string from proc" }
       expect(element.render).to eq("<div>string from proc</div>")
     end
 
     it "renders mixed content with Proc and string" do
       element = ElementComponent::Element.new("div")
       element.add_content("before ")
-      element.add_content { |e| e.new_element("em") }
+      element.add_content { |b| b << ElementComponent::Element.new("em") }
       element.add_content(" after")
       expect(element.render).to eq("<div>before <em></em> after</div>")
     end
 
-    it "renders Proc with add_content returning self gracefully" do
+    it "renders Proc pushing multiple items to buffer" do
       element = ElementComponent::Element.new("div")
-      element.add_content { |e| e.add_content("nested") }
-      expect(element.render).to eq("<div></div>")
+      element.add_content { |b| b << "nested" }
+      expect(element.render).to eq("<div>nested</div>")
     end
   end
 
   describe "new_element with block" do
     it "creates element with block content via constructor DSL" do
       div = ElementComponent::Element.new("div")
-      div.add_content(div.new_element("p") { |e| e.add_content("text") })
+      div.add_content(div.new_element("p") { |b| b << "text" })
       expect(div.render).to eq("<div><p>text</p></div>")
     end
 
     it "creates element with block inside a Proc" do
       div = ElementComponent::Element.new("div")
-      div.add_content { |e| e.new_element("span") { |inner| inner.add_content("nested") } }
+      div.add_content { |b| b << div.new_element("span") { |b2| b2 << "nested" } }
       expect(div.render).to eq("<div><span>nested</span></div>")
     end
 
     it "creates nested new_element with chain of blocks" do
-      div = ElementComponent::Element.new("div") do |e|
-        e.add_content(e.new_element("ul") do |ul|
-          ul.add_content(ul.new_element("li") { |li| li.add_content("item") })
-        end)
+      div = ElementComponent::Element.new("div") do |b|
+        b << ElementComponent::Element.new("ul") do |b2|
+          b2 << ElementComponent::Element.new("li") { |b3| b3 << "item" }
+        end
       end
       expect(div.render).to eq("<div><ul><li>item</li></ul></div>")
     end
 
     it "creates element with block and attributes" do
-      div = ElementComponent::Element.new("div") do |e|
-        e.add_content(e.new_element("a", href: "/link") { |a| a.add_content("click") })
+      div = ElementComponent::Element.new("div") do |b|
+        b << ElementComponent::Element.new("a", href: "/link") { |b2| b2 << "click" }
       end
       expect(div.render).to eq("<div><a href=\"/link\">click</a></div>")
     end
@@ -145,7 +145,7 @@ RSpec.describe ElementComponent::Element do
 
   describe "Add array with mixed content types" do
     before do
-      subject.add_content(["text", ElementComponent::Element.new("span") { |s| s.add_content("nested") }])
+      subject.add_content(["text", ElementComponent::Element.new("span") { |b| b << "nested" }])
     end
 
     it { expect(subject.contents.count).to eq(2) }
@@ -203,9 +203,10 @@ RSpec.describe ElementComponent::Element do
     end
 
     context "content with block" do
-      subject { ElementComponent::Element.new("div", "antes") { |e| e.add_content("depois") } }
+      subject { ElementComponent::Element.new("div", "antes") { |b| b << "depois" } }
 
-      it { expect(subject.contents).to eq(%w[antes depois]) }
+      it { expect(subject.contents.first).to eq("antes") }
+      it { expect(subject.contents.last).to be_a(Proc) }
       it { expect(subject.render).to eq("<div>antesdepois</div>") }
     end
 

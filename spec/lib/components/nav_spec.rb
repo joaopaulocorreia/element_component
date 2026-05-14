@@ -106,15 +106,15 @@ RSpec.describe ElementComponent::Components::Nav do
 
   describe "nav with items and links" do
     subject do
-      ElementComponent::Components::Nav.new(type: :pills) do |n|
-        n.add_content(ElementComponent::Components::NavItem.new do |ni|
-          ni.add_content(ElementComponent::Components::NavLink.new(href: "/", active: true) do |nl|
-            nl.add_content("Home")
-          end)
-        end)
-        n.add_content(ElementComponent::Components::NavItem.new do |ni|
-          ni.add_content(ElementComponent::Components::NavLink.new(href: "/about") { |nl| nl.add_content("About") })
-        end)
+      ElementComponent::Components::Nav.new(type: :pills) do |b|
+        b << ElementComponent::Components::NavItem.new do |ni|
+          ni << ElementComponent::Components::NavLink.new(href: "/", active: true) do |nl|
+            nl << "Home"
+          end
+        end
+        b << ElementComponent::Components::NavItem.new do |ni|
+          ni << ElementComponent::Components::NavLink.new(href: "/about") { |b2| b2 << "About" }
+        end
       end
     end
 

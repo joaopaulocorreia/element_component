@@ -79,8 +79,8 @@ RSpec.describe ElementComponent::Components::ListGroup do
 
   describe "list group with items" do
     subject do
-      ElementComponent::Components::ListGroup.new do |lg|
-        lg.add_content(ElementComponent::Components::ListGroupItem.new { |lgi| lgi.add_content("Item") })
+      ElementComponent::Components::ListGroup.new do |b|
+        b << ElementComponent::Components::ListGroupItem.new { |b2| b2 << "Item" }
       end
     end
 

@@ -33,7 +33,7 @@ RSpec.describe ElementComponent::Components::Badge do
   describe "with block content" do
     subject do
       ElementComponent::Components::Badge.new(variant: :success) do |b|
-        b.add_content("Done")
+        b << "Done"
       end
     end
 

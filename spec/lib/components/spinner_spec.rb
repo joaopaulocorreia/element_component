@@ -37,8 +37,8 @@ RSpec.describe ElementComponent::Components::Spinner do
 
   describe "with block content" do
     subject do
-      ElementComponent::Components::Spinner.new do |s|
-        s.add_content("Loading...")
+      ElementComponent::Components::Spinner.new do |b|
+        b << "Loading..."
       end
     end
 

@@ -127,10 +127,10 @@ RSpec.describe ElementComponent::Components::Card do
 
   describe "card with header, body, footer" do
     subject do
-      ElementComponent::Components::Card.new do |c|
-        c.add_content(ElementComponent::Components::CardHeader.new { |ch| ch.add_content("Header") })
-        c.add_content(ElementComponent::Components::CardBody.new { |cb| cb.add_content("Body") })
-        c.add_content(ElementComponent::Components::CardFooter.new { |cf| cf.add_content("Footer") })
+      ElementComponent::Components::Card.new do |b|
+        b << ElementComponent::Components::CardHeader.new { |b2| b2 << "Header" }
+        b << ElementComponent::Components::CardBody.new { |b2| b2 << "Body" }
+        b << ElementComponent::Components::CardFooter.new { |b2| b2 << "Footer" }
       end
     end
 
@@ -144,11 +144,11 @@ RSpec.describe ElementComponent::Components::Card do
 
   describe "card with title and text" do
     subject do
-      ElementComponent::Components::Card.new do |c|
-        c.add_content(ElementComponent::Components::CardBody.new do |cb|
-          cb.add_content(ElementComponent::Components::CardTitle.new { |ct| ct.add_content("Title") })
-          cb.add_content(ElementComponent::Components::CardText.new { |ct| ct.add_content("Text") })
-        end)
+      ElementComponent::Components::Card.new do |b|
+        b << ElementComponent::Components::CardBody.new do |b2|
+          b2 << ElementComponent::Components::CardTitle.new { |b3| b3 << "Title" }
+          b2 << ElementComponent::Components::CardText.new { |b3| b3 << "Text" }
+        end
       end
     end
 
@@ -161,8 +161,8 @@ RSpec.describe ElementComponent::Components::Card do
 
   describe "card with image" do
     subject do
-      ElementComponent::Components::Card.new do |c|
-        c.add_content(ElementComponent::Components::CardImage.new(src: "img.jpg", top: true))
+      ElementComponent::Components::Card.new do |b|
+        b << ElementComponent::Components::CardImage.new(src: "img.jpg", top: true)
       end
     end
 
