@@ -24,6 +24,7 @@ lib/
       badge.rb                      # Badge component
       breadcrumb.rb                 # Breadcrumb component
       breadcrumb/
+        list.rb                     # BreadcrumbList component
         item.rb                     # BreadcrumbItem component
       button.rb                     # Button component
       button_group.rb               # ButtonGroup component
@@ -85,6 +86,8 @@ spec/
       alert_spec.rb                 # Alert component tests
       badge_spec.rb                 # Badge component tests
       breadcrumb_spec.rb            # Breadcrumb component tests
+      breadcrumb/
+        list_spec.rb                # BreadcrumbList component tests
       button_spec.rb                # Button component tests
       button_group_spec.rb          # ButtonGroup component tests
       card_spec.rb                  # Card component tests
@@ -347,7 +350,8 @@ Note: Uses anonymous block parameter `&`.
 #### Sub-components
 
 | Component | Tag | CSS Class | Constructor |
-|---|---|---|---|
+|---|---|---|---|---|
+| `BreadcrumbList` | `<ol>` | `breadcrumb` | `BreadcrumbList.new(content = nil, **attributes, &)` |
 | `BreadcrumbItem` | `<li>` | `breadcrumb-item` | `BreadcrumbItem.new(content, href: nil, active: false, **attributes, &block)` |
 
 **BreadcrumbItem details:**
@@ -358,16 +362,18 @@ Note: Uses anonymous block parameter `&`.
 #### Composition
 ```
 Breadcrumb (<nav>)
-└── <ol class="breadcrumb">
+└── BreadcrumbList (<ol class="breadcrumb">)
     └── BreadcrumbItem (<li>) × N
 ```
 
 #### Usage Examples
 ```ruby
 Breadcrumb.new do |e|
-  e << BreadcrumbItem.new("Home", href: "/")
-  e << BreadcrumbItem.new("Products", href: "/products")
-  e << BreadcrumbItem.new("Current", active: true)
+  e << BreadcrumbList.new do |list|
+    list << BreadcrumbItem.new("Home", href: "/")
+    list << BreadcrumbItem.new("Products", href: "/products")
+    list << BreadcrumbItem.new("Current", active: true)
+  end
 end
 ```
 
@@ -1377,6 +1383,42 @@ class MyElement < ElementComponent::Element
 end
 ```
 
+#### around_render — Replacing build behavior
+
+When a component needs HTML structure different from the default `opening_tag + content + closing_tag`, define `around_render` instead of overriding `build`. This keeps hooks composable and follows the same pattern as `before_render`/`after_render`.
+
+**Pattern A — Don't yield (replace build entirely):**
+Use when you need to inject wrappers between the opening tag and content. Do NOT call `yield`:
+
+```ruby
+class Panel < Element
+  def initialize(content = nil, **attributes, &)
+    super("div", &)
+    add_attribute(attributes) unless attributes.empty?
+    add_content(content) if content
+  end
+
+  def around_render
+    @html << opening_tag
+    @html << '<div class="panel-body">'
+    @html << mount_content(contents)
+    @html << "</div>"
+    @html << closing_tag
+  end
+end
+```
+
+**Pattern B — Yield (wrap the default build):**
+Use when you need to wrap the ENTIRE element output in extra HTML:
+
+```ruby
+def around_render
+  @html << '<div class="outer-wrapper">'
+  yield  # calls build: opening_tag + content + closing_tag
+  @html << "</div>"
+end
+```
+
 ### Caching
 ```ruby
 e = E.new("div", "expensive content")
@@ -1420,6 +1462,76 @@ ElementComponent::Alert.new("msg")
 EC::Alert.new("msg")
 ```
 
+## Component Design Patterns
+
+### Composition Over Hooks
+
+When a component needs HTML structure beyond `<tag>content</tag>`, prefer **composition** over overriding hooks (`build`, `around_render`, `wrap_content`). Break the structure into smaller public components that compose via `<<`.
+
+Principle: each component owns **one HTML tag**. Wrappers become separate, independently testable components.
+
+#### Example: Breadcrumb
+
+**Before** — Breadcrumb overrode `around_render` to inject the `<ol>` wrapper:
+
+```ruby
+class Breadcrumb < Element
+  def around_render
+    @html << opening_tag
+    @html << '<ol class="breadcrumb">'
+    @html << mount_content(contents)
+    @html << "</ol>"
+    @html << closing_tag
+  end
+end
+```
+
+**After** — decomposed into two components, no hooks:
+
+```ruby
+class Breadcrumb < Element
+  # <nav aria-label="breadcrumb"> — no hooks
+end
+
+class BreadcrumbList < Element
+  # <ol class="breadcrumb"> — no hooks
+end
+```
+
+Usage becomes explicit:
+
+```ruby
+Breadcrumb.new do |e|
+  e << BreadcrumbList.new do |list|
+    list << BreadcrumbItem.new("Home", href: "/")
+    list << BreadcrumbItem.new("Current", active: true)
+  end
+end
+```
+
+#### Benefits
+- **Single responsibility** — each component renders exactly one tag
+- **Independently testable** — `BreadcrumbList` can be tested in isolation
+- **No hook overrides** — default `build` handles `opening_tag + content + closing_tag`
+- **Self-documenting DSL** — the block structure mirrors the HTML output
+- **Reusable** — `BreadcrumbList` can be used standalone or inside other components
+
+#### When to Prefer Hooks Instead
+- The wrapper is an **implementation detail** with no semantic value (e.g., a `<div>` for CSS)
+- **Backward compatibility** requires keeping a flat API
+- Adding a component would make the DSL **overly verbose**
+
+#### Decision Checklist
+| Scenario | Prefer |
+|---|---|
+| Wrapper has semantic meaning (`<ol>`, `<ul>`, `<nav>`) | Composition |
+| Wrapper is a Bootstrap structural requirement | Either |
+| Sub-component could be reused elsewhere | Composition |
+| Wrapper is purely presentational (`<div>`) | Hook |
+| Flat API required for backward compatibility | Hook |
+
+---
+
 ## Composition Rules by Component
 
 ```
@@ -1429,7 +1541,7 @@ Leaf Components (no children):
 
 Container Components (hold sub-components via add_content/<<):
   Alert → Heading, Link, CloseButton
-  Breadcrumb → BreadcrumbItem × N
+  Breadcrumb → BreadcrumbList → BreadcrumbItem × N
   Card → Header, Body, Footer, Title, Text, Image (any order)
   Carousel → CarouselItem × N
   Dropdown → Menu, Items, Dividers, Headers
