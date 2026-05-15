@@ -12,7 +12,6 @@ module ElementComponent
   Alert = Components::Alert
   Badge = Components::Badge
   Breadcrumb = Components::Breadcrumb
-  BreadcrumbList = Components::BreadcrumbList
   Button = Components::Button
   ButtonGroup = Components::ButtonGroup
   Card = Components::Card
@@ -31,7 +30,6 @@ module ElementComponent
   AlertHeading = Components::AlertHeading
   AlertLink = Components::AlertLink
   AlertCloseButton = Components::AlertCloseButton
-  BreadcrumbItem = Components::BreadcrumbItem
   CardHeader = Components::CardHeader
   CardBody = Components::CardBody
   CardFooter = Components::CardFooter

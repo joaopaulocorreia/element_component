@@ -3,11 +3,11 @@
 module ElementComponent
   module Components
     module Breadcrumb
-      class List < Element
+      class Breadcrumb < Element
         def initialize(content = nil, **attributes, &)
-          super("ol", content, **attributes, &)
+          super("nav", content, **attributes, &)
 
-          add_attribute(class: "breadcrumb")
+          add_attribute("aria-label": "breadcrumb")
         end
       end
     end

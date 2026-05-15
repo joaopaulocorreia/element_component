@@ -2,7 +2,7 @@
 
 require_relative "components/alert"
 require_relative "components/badge"
-require_relative "components/breadcrumb"
+require_relative "components/breadcrumb/component"
 require_relative "components/button"
 require_relative "components/button_group"
 require_relative "components/card"
