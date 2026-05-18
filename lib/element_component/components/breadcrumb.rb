@@ -7,11 +7,9 @@ module ElementComponent
   module Components
     class Breadcrumb < Element
       def initialize(content = nil, **attributes, &)
-        super("nav", &)
+        super("nav", content, **attributes, &)
 
         add_attribute("aria-label": "breadcrumb")
-        add_attribute(attributes) unless attributes.empty?
-        add_content(content)
       end
     end
   end

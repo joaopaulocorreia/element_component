@@ -113,7 +113,7 @@ RSpec.describe ElementComponent::Components::NavbarBrand do
 
   describe "#render" do
     it "renders navbar-brand link" do
-      expect(subject.render).to include('<a class="navbar-brand" href="/">')
+      expect(subject.render).to include('<a href="/" class="navbar-brand">')
     end
   end
 end

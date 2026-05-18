@@ -20,7 +20,9 @@ RSpec.describe ElementComponent::Components::BreadcrumbList do
   describe "with items" do
     subject do
       described_class.new do |list|
-        list << ElementComponent::Components::BreadcrumbItem.new(href: "/") { |i| i << "Home" }
+        list << ElementComponent::Components::BreadcrumbItem.new do |i|
+          i << ElementComponent::E.new("a", "Home", href: "/")
+        end
         list << ElementComponent::Components::BreadcrumbItem.new(active: true) { |i| i << "Current" }
       end
     end

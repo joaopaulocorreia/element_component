@@ -3,13 +3,13 @@
 module ElementComponent
   module Components
     class DropdownMenu < Element
-      def initialize(content = nil, align: nil, **attributes, &block)
-        super("ul", &block)
+      VALID_ALIGNS = %i[start end].freeze
+
+      def initialize(content = nil, align: nil, **attributes)
+        super("ul", content, **attributes)
 
         add_attribute(class: "dropdown-menu")
         add_attribute(class: "dropdown-menu-#{align}") if align
-        add_attribute(attributes) unless attributes.empty?
-        add_content(content) if content
       end
     end
   end

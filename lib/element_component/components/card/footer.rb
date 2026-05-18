@@ -4,11 +4,9 @@ module ElementComponent
   module Components
     class CardFooter < Element
       def initialize(content = nil, **attributes, &)
-        super("div", &)
+        super("div", content, **attributes, &)
 
         add_attribute(class: "card-footer")
-        add_attribute(attributes) unless attributes.empty?
-        add_content(content) if content
       end
     end
   end

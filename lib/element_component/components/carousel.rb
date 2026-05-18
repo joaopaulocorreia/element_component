@@ -10,6 +10,7 @@ module ElementComponent
         @carousel_id = id
         @show_indicators = indicators
         @show_controls = controls
+
         super("div", &block)
 
         add_attribute(id: id)

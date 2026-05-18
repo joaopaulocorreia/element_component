@@ -4,11 +4,9 @@ module ElementComponent
   module Components
     class ModalTitle < Element
       def initialize(content = nil, **attributes, &)
-        super("h5", &)
+        super("h5", content, **attributes, &)
 
         add_attribute(class: "modal-title")
-        add_attribute(attributes) unless attributes.empty?
-        add_content(content) if content
       end
     end
   end

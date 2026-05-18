@@ -98,7 +98,7 @@ RSpec.describe ElementComponent::Components::Alert do
 
     it "renders a link" do
       subject.add_content("more info")
-      expected = '<a class="alert-link" href="/info">more info</a>'
+      expected = '<a href="/info" class="alert-link">more info</a>'
       expect(subject.render).to eq(expected)
     end
   end
@@ -154,7 +154,7 @@ RSpec.describe ElementComponent::Components::Alert do
       expect(html).to start_with('<div class="alert alert-info" role="alert">')
       expect(html).to include('<h4 class="alert-heading">Info</h4>')
       expect(html).to include("Something happened. ")
-      expect(html).to include('<a class="alert-link" href="/details">View details</a>')
+      expect(html).to include('<a href="/details" class="alert-link">View details</a>')
       expect(html).to end_with("</div>")
     end
   end

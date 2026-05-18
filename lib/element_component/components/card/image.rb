@@ -3,14 +3,12 @@
 module ElementComponent
   module Components
     class CardImage < Element
-      def initialize(src: "", top: false, bottom: false, **attributes, &block)
-        super("img", closing_tag: false, &block)
+      def initialize(src: "", top: false, bottom: false, **attributes, &)
+        super("img", closing_tag: false, **attributes, &)
 
-        add_attribute(class: "card-img")
+        add_attribute(class: "card-img", src:)
         add_attribute(class: "card-img-top") if top
         add_attribute(class: "card-img-bottom") if bottom
-        add_attribute(src: src)
-        add_attribute(attributes) unless attributes.empty?
       end
     end
   end

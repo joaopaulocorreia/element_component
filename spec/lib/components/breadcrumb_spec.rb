@@ -44,8 +44,8 @@ RSpec.describe ElementComponent::Components::Breadcrumb do
 
     describe "with href" do
       it "renders with link" do
-        item = ElementComponent::Components::BreadcrumbItem.new(href: "/")
-        item.add_content("Home")
+        item = ElementComponent::Components::BreadcrumbItem.new
+        item.add_content(ElementComponent::E.new("a", "Home", href: "/"))
         expect(item.render).to eq('<li class="breadcrumb-item"><a href="/">Home</a></li>')
       end
     end
@@ -63,7 +63,9 @@ RSpec.describe ElementComponent::Components::Breadcrumb do
     subject do
       described_class.new do |b|
         b << ElementComponent::Components::BreadcrumbList.new do |list|
-          list << ElementComponent::Components::BreadcrumbItem.new(href: "/") { |i| i << "Home" }
+          list << ElementComponent::Components::BreadcrumbItem.new do |i|
+            i << ElementComponent::E.new("a", "Home", href: "/")
+          end
           list << ElementComponent::Components::BreadcrumbItem.new(active: true) { |i| i << "Current" }
         end
       end

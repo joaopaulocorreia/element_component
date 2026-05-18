@@ -10,15 +10,11 @@ module ElementComponent
       VALID_VARIANTS = %i[primary secondary success danger warning info light dark].freeze
 
       def initialize(content = nil, variant: :primary, dismissible: false, **attributes, &block)
-        super("div", &block)
+        super("div", content, **attributes, &block)
 
-        add_attribute(class: "alert")
-        add_attribute(class: "alert-#{variant}")
+        add_attribute(class: "alert alert-#{variant}", role: "alert")
         add_attribute(class: "alert-dismissible") if dismissible
-        add_attribute(role: "alert")
 
-        add_attribute(attributes) unless attributes.empty?
-        add_content(content) if content
         add_content(AlertCloseButton.new) if dismissible
       end
     end

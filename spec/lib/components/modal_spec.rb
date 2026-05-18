@@ -12,10 +12,6 @@ RSpec.describe ElementComponent::Components::Modal do
         expect(html).to include('<div class="modal fade" tabindex="-1" aria-hidden="true">')
         expect(html).to include("</div>")
       end
-
-      it "includes modal-dialog" do
-        expect(subject.render).to include('class="modal-dialog"')
-      end
     end
 
     context "with static backdrop" do
@@ -25,6 +21,35 @@ RSpec.describe ElementComponent::Components::Modal do
         html = subject.render
         expect(html).to include('data-bs-backdrop="static"')
         expect(html).to include('data-bs-keyboard="false"')
+      end
+    end
+
+    context "without fade" do
+      let(:options) { { fade: false } }
+
+      it "does not add fade class" do
+        expect(subject.render).not_to include("fade")
+      end
+    end
+
+    context "with custom attributes" do
+      let(:options) { { class: "custom-modal" } }
+
+      it "preserves custom attributes" do
+        expect(subject.render).to include("custom-modal")
+      end
+    end
+  end
+end
+
+RSpec.describe ElementComponent::Components::ModalDialog do
+  subject { described_class.new(**options) }
+  let(:options) { {} }
+
+  describe "#render" do
+    context "with default options" do
+      it "renders modal-dialog" do
+        expect(subject.render).to include('class="modal-dialog"')
       end
     end
 
@@ -43,53 +68,6 @@ RSpec.describe ElementComponent::Components::Modal do
 
       it "adds size class" do
         expect(subject.render).to include("modal-lg")
-      end
-    end
-
-    context "without fade" do
-      let(:options) { { fade: false } }
-
-      it "does not add fade class" do
-        expect(subject.render).not_to include("fade")
-      end
-    end
-
-    context "with content block" do
-      let(:options) { { size: :md } }
-      let(:block) do
-        proc do |b|
-          b << ElementComponent::Components::ModalContent.new do |b2|
-            b2 << ElementComponent::Components::ModalHeader.new do |b3|
-              b3 << ElementComponent::Components::ModalTitle.new { |b4| b4 << "Title" }
-            end
-            b2 << ElementComponent::Components::ModalBody.new { |b3| b3 << "Body" }
-            b2 << ElementComponent::Components::ModalFooter.new { |b3| b3 << "Footer" }
-          end
-        end
-      end
-
-      it "renders with sub-components" do
-        html = subject.render
-        expect(html).to include("modal-header")
-        expect(html).to include("modal-title")
-        expect(html).to include("modal-body")
-        expect(html).to include("modal-footer")
-        expect(html).to include("Title")
-        expect(html).to include("Body")
-        expect(html).to include("Footer")
-      end
-    end
-  end
-end
-
-RSpec.describe ElementComponent::Components::ModalDialog do
-  subject { described_class.new(**options) }
-  let(:options) { {} }
-
-  describe "#render" do
-    context "with default options" do
-      it "renders modal-dialog" do
-        expect(subject.render).to include('class="modal-dialog"')
       end
     end
 

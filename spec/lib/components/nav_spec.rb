@@ -19,21 +19,21 @@ RSpec.describe ElementComponent::Components::Nav do
 
   describe "tabs" do
     it "renders tabs" do
-      nav = ElementComponent::Components::Nav.new(type: :tabs)
+      nav = ElementComponent::Components::Nav.new(variant: :tabs)
       expect(nav.render).to eq('<ul class="nav nav-tabs"></ul>')
     end
   end
 
   describe "pills" do
     it "renders pills" do
-      nav = ElementComponent::Components::Nav.new(type: :pills)
+      nav = ElementComponent::Components::Nav.new(variant: :pills)
       expect(nav.render).to eq('<ul class="nav nav-pills"></ul>')
     end
   end
 
   describe "underline" do
     it "renders underline" do
-      nav = ElementComponent::Components::Nav.new(type: :underline)
+      nav = ElementComponent::Components::Nav.new(variant: :underline)
       expect(nav.render).to eq('<ul class="nav nav-underline"></ul>')
     end
   end
@@ -82,7 +82,7 @@ RSpec.describe ElementComponent::Components::Nav do
       end
 
       it "has default href" do
-        expect(subject.attributes[:href]).to eq(["#"])
+        expect(subject.attributes[:href]).to be_nil
       end
     end
 
@@ -106,7 +106,7 @@ RSpec.describe ElementComponent::Components::Nav do
 
   describe "nav with items and links" do
     subject do
-      ElementComponent::Components::Nav.new(type: :pills) do |b|
+      ElementComponent::Components::Nav.new(variant: :pills) do |b|
         b << ElementComponent::Components::NavItem.new do |ni|
           ni << ElementComponent::Components::NavLink.new(href: "/", active: true) do |nl|
             nl << "Home"
@@ -122,8 +122,8 @@ RSpec.describe ElementComponent::Components::Nav do
       html = subject.render
       expect(html).to include('<ul class="nav nav-pills">')
       expect(html).to include('<li class="nav-item">')
-      expect(html).to include('<a class="nav-link active" href="/" aria-current="page">Home</a>')
-      expect(html).to include('<a class="nav-link" href="/about">About</a>')
+      expect(html).to include('<a href="/" class="nav-link active" aria-current="page">Home</a>')
+      expect(html).to include('<a href="/about" class="nav-link">About</a>')
     end
   end
 end

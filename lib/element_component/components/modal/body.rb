@@ -4,11 +4,9 @@ module ElementComponent
   module Components
     class ModalBody < Element
       def initialize(content = nil, **attributes, &)
-        super("div", &)
+        super("div", content, **attributes, &)
 
         add_attribute(class: "modal-body")
-        add_attribute(attributes) unless attributes.empty?
-        add_content(content) if content
       end
     end
   end

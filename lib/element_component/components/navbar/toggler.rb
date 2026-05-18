@@ -4,7 +4,7 @@ module ElementComponent
   module Components
     class NavbarToggler < Element
       def initialize(target: nil, **attributes)
-        super("button", closing_tag: false)
+        super("button", closing_tag: false, **attributes)
 
         add_attribute(class: "navbar-toggler")
         add_attribute(type: "button")
@@ -13,7 +13,6 @@ module ElementComponent
         add_attribute("aria-controls": target) if target
         add_attribute("aria-expanded": "false")
         add_attribute("aria-label": "Toggle navigation")
-        add_attribute(attributes) unless attributes.empty?
 
         add_content(Element.new("span", class: "navbar-toggler-icon"))
       end

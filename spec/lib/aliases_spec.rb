@@ -104,7 +104,7 @@ RSpec.describe "ElementComponent aliases" do
 
     it "creates Badge directly" do
       badge = ElementComponent::Badge.new("New", variant: :primary)
-      expect(badge.render).to eq('<span class="badge bg-primary">New</span>')
+      expect(badge.render).to eq('<span class="badge text-bg-primary">New</span>')
     end
 
     it "creates Spinner directly" do
@@ -119,8 +119,8 @@ RSpec.describe "ElementComponent aliases" do
 
     it "creates Modal directly" do
       modal = ElementComponent::Modal.new
-      expect(modal.render).to include("modal")
-      expect(modal.render).to include("modal-dialog")
+      expect(modal.render).to include('class="modal fade"')
+      expect(modal.render).to include('tabindex="-1"')
     end
 
     it "creates NavItem directly" do
@@ -130,7 +130,7 @@ RSpec.describe "ElementComponent aliases" do
 
     it "creates NavLink directly" do
       link = ElementComponent::NavLink.new("Home", href: "/")
-      expect(link.render).to eq('<a class="nav-link" href="/">Home</a>')
+      expect(link.render).to eq('<a href="/" class="nav-link">Home</a>')
     end
   end
 

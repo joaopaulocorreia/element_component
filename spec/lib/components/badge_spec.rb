@@ -13,12 +13,12 @@ RSpec.describe ElementComponent::Components::Badge do
     end
 
     it "has variant class" do
-      expect(subject.attributes[:class]).to include("bg-primary")
+      expect(subject.attributes[:class]).to include("text-bg-primary")
     end
 
     it "renders default badge" do
       subject.add_content("New")
-      expect(subject.render).to eq('<span class="badge bg-primary">New</span>')
+      expect(subject.render).to eq('<span class="badge text-bg-primary">New</span>')
     end
   end
 
@@ -26,7 +26,7 @@ RSpec.describe ElementComponent::Components::Badge do
     it "renders pill badge" do
       badge = ElementComponent::Components::Badge.new(variant: :danger, pill: true)
       badge.add_content("99+")
-      expect(badge.render).to eq('<span class="badge bg-danger rounded-pill">99+</span>')
+      expect(badge.render).to eq('<span class="badge text-bg-danger rounded-pill">99+</span>')
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe ElementComponent::Components::Badge do
     end
 
     it "renders with content" do
-      expect(subject.render).to eq('<span class="badge bg-success">Done</span>')
+      expect(subject.render).to eq('<span class="badge text-bg-success">Done</span>')
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe ElementComponent::Components::Badge do
     it "renders badge-#{variant}" do
       badge = ElementComponent::Components::Badge.new(variant: variant)
       badge.add_content("Test")
-      expect(badge.render).to include("bg-#{variant}")
+      expect(badge.render).to include("text-bg-#{variant}")
     end
   end
 end
