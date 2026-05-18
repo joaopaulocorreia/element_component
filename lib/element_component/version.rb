@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module ElementComponent
-  VERSION = "0.13.0"
+  VERSION = "1.14.0"
 end
