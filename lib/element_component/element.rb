@@ -54,10 +54,12 @@ module ElementComponent
       @attributes = @attributes.except(attribute)
     end
 
-    def remove_attribute_value(attribute, value)
+    def remove_attribute_value(attribute, values)
       return unless @attributes[attribute]
 
-      @attributes[attribute].delete(value)
+      values = Array(values)
+      values.each { |value| @attributes[attribute].delete(value) }
+
       @attributes.delete(attribute) if @attributes[attribute].empty?
     end
 
