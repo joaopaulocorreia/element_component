@@ -85,6 +85,8 @@ module ElementComponent
     def render
       return @cached_html if @cache_enabled && @cached_html
 
+      template if respond_to? "template"
+
       @html = String.new
 
       before_render if respond_to? "before_render"
@@ -152,6 +154,7 @@ module ElementComponent
       contents.map do |c|
         case c
         when Element
+          c.instance_variable_set("@view_context", @view_context) if @view_context
           c.render
         when ->(c) { c.respond_to?(:html_safe?) && c.html_safe? }
           c.to_s
