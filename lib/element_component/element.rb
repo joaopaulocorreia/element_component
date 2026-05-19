@@ -153,7 +153,7 @@ module ElementComponent
         case c
         when Element
           c.render
-        when SafeString
+        when ->(c) { c.respond_to?(:html_safe?) && c.html_safe? }
           c.to_s
         else
           escape_html(c.to_s)
