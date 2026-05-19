@@ -104,7 +104,11 @@ module ElementComponent
       defined?(ActiveSupport::SafeBuffer) ? @html.html_safe : SafeString.new(@html)
     end
 
-    def render_in(*) = render
+    def render_in(view_context)
+      @view_context = view_context
+
+      render
+    end
 
     def cache(key = nil, expires_in: nil)
       @cache_enabled = true
