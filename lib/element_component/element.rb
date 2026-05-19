@@ -158,8 +158,7 @@ module ElementComponent
       contents.map do |c|
         case c
         when Element
-          c.instance_variable_set("@view_context", @view_context) if @view_context
-          c.render
+          c.render_in(@view_context)
         when ->(c) { c.respond_to?(:html_safe?) && c.html_safe? }
           c.to_s
         else
