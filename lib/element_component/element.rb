@@ -5,10 +5,12 @@ require "cgi"
 module ElementComponent
   class Element
     attr_reader :element, :attributes, :contents
+    attr_writer :wrap
 
-    def initialize(element, content = nil, closing_tag: true, **attribute, &block)
+    def initialize(element, content = nil, closing_tag: true, wrap: true, **attribute, &block)
       @element = element
       @closing_tag = closing_tag
+      @wrap = wrap
       @html = String.new
 
       add_attribute!(attribute)
@@ -130,9 +132,9 @@ module ElementComponent
     private
 
     def build
-      @html << opening_tag
+      @html << opening_tag if wrap
       @html << mount_content(contents)
-      @html << closing_tag
+      @html << closing_tag if wrap
       @html
     end
 
