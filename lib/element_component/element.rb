@@ -132,9 +132,9 @@ module ElementComponent
     private
 
     def build
-      @html << opening_tag if wrap
+      @html << opening_tag if @wrap
       @html << mount_content(contents)
-      @html << closing_tag if wrap
+      @html << closing_tag if @wrap
       @html
     end
 
