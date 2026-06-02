@@ -9,15 +9,35 @@ module ElementComponent
         super("div", content, **attributes, &)
 
         add_attribute(class: "row")
-        add_classes_from_breakpoints("row-cols", cols)
-        add_classes_from_breakpoints("g", gutter)
-        add_classes_from_breakpoints("gx", gutter_x)
-        add_classes_from_breakpoints("gy", gutter_y)
+        apply_breakpoint_classes("row-cols", cols)
+        apply_breakpoint_classes("g", gutter)
+        apply_breakpoint_classes("gx", gutter_x)
+        apply_breakpoint_classes("gy", gutter_y)
+      end
+
+      def cols(value)
+        apply_breakpoint_classes("row-cols", value)
+        self
+      end
+
+      def gutter(value)
+        apply_breakpoint_classes("g", value)
+        self
+      end
+
+      def gutter_x(value)
+        apply_breakpoint_classes("gx", value)
+        self
+      end
+
+      def gutter_y(value)
+        apply_breakpoint_classes("gy", value)
+        self
       end
 
       private
 
-      def add_classes_from_breakpoints(prefix, value)
+      def apply_breakpoint_classes(prefix, value)
         breakpoint_classes(prefix, value).each { |klass| add_attribute(class: klass) }
       end
     end
