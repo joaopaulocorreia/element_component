@@ -18,51 +18,85 @@ RSpec.describe ElementComponent::Components::Col do
     end
   end
 
-  describe "with size" do
+  describe "with col" do
     it "renders col-6" do
-      col = ElementComponent::Components::Col.new(size: 6)
+      col = ElementComponent::Components::Col.new(col: 6)
       expect(col.render).to eq('<div class="col-6"></div>')
     end
 
     it "renders col-12" do
-      col = ElementComponent::Components::Col.new(size: 12)
+      col = ElementComponent::Components::Col.new(col: 12)
       expect(col.render).to eq('<div class="col-12"></div>')
     end
   end
 
-  describe "with breakpoint" do
-    it "renders col-md" do
-      col = ElementComponent::Components::Col.new(breakpoint: :md)
-      expect(col.render).to eq('<div class="col-md"></div>')
-    end
-
+  describe "with col as hash" do
     it "renders col-md-6" do
-      col = ElementComponent::Components::Col.new(breakpoint: :md, size: 6)
+      col = ElementComponent::Components::Col.new(col: { md: 6 })
       expect(col.render).to eq('<div class="col-md-6"></div>')
     end
 
     it "renders col-lg-4" do
-      col = ElementComponent::Components::Col.new(breakpoint: :lg, size: 4)
+      col = ElementComponent::Components::Col.new(col: { lg: 4 })
       expect(col.render).to eq('<div class="col-lg-4"></div>')
     end
 
-    it "renders col-sm-12" do
-      col = ElementComponent::Components::Col.new(breakpoint: :sm, size: 12)
-      expect(col.render).to eq('<div class="col-sm-12"></div>')
+    it "renders col-12 col-md-6" do
+      col = ElementComponent::Components::Col.new(col: { default: 12, md: 6 })
+      expect(col.render).to eq('<div class="col-12 col-md-6"></div>')
+    end
+
+    it "renders col-12 col-md-6 col-lg-4" do
+      col = ElementComponent::Components::Col.new(col: { default: 12, md: 6, lg: 4 })
+      expect(col.render).to eq('<div class="col-12 col-md-6 col-lg-4"></div>')
+    end
+
+    it "renders col-md col-lg (auto width)" do
+      col = ElementComponent::Components::Col.new(col: { md: true, lg: true })
+      expect(col.render).to eq('<div class="col-md col-lg"></div>')
+    end
+
+    it "renders col col-md-6" do
+      col = ElementComponent::Components::Col.new(col: { default: true, md: 6 })
+      expect(col.render).to eq('<div class="col col-md-6"></div>')
     end
   end
 
   describe "with offset" do
     it "renders with offset" do
-      col = ElementComponent::Components::Col.new(size: 6, offset: 3)
+      col = ElementComponent::Components::Col.new(col: 6, offset: 3)
       expect(col.render).to eq('<div class="col-6 offset-3"></div>')
+    end
+  end
+
+  describe "with offset as hash" do
+    it "renders with offset hash" do
+      col = ElementComponent::Components::Col.new(col: 6, offset: { default: 3, md: 2 })
+      expect(col.render).to eq('<div class="col-6 offset-3 offset-md-2"></div>')
+    end
+
+    it "renders with offset hash without default" do
+      col = ElementComponent::Components::Col.new(col: 6, offset: { md: 2, lg: 1 })
+      expect(col.render).to eq('<div class="col-6 offset-md-2 offset-lg-1"></div>')
     end
   end
 
   describe "with order" do
     it "renders with order" do
-      col = ElementComponent::Components::Col.new(size: 6, order: 1)
+      col = ElementComponent::Components::Col.new(col: 6, order: 1)
       expect(col.render).to eq('<div class="col-6 order-1"></div>')
+    end
+  end
+
+  describe "with order as hash" do
+    it "renders with order hash" do
+      col = ElementComponent::Components::Col.new(col: 6, order: { default: 1, md: 2 })
+      expect(col.render).to eq('<div class="col-6 order-1 order-md-2"></div>')
+    end
+
+    it "renders with order hash without default" do
+      col = ElementComponent::Components::Col.new(col: 6, order: { md: 2, lg: 3 })
+      expect(col.render).to eq('<div class="col-6 order-md-2 order-lg-3"></div>')
     end
   end
 
@@ -84,42 +118,6 @@ RSpec.describe ElementComponent::Components::Col do
     it "preserves custom class" do
       expect(subject.attributes[:class]).to include("custom")
       expect(subject.attributes[:class]).to include("col")
-    end
-  end
-
-  describe "with multiple breakpoints" do
-    it "renders col-12 col-lg-6" do
-      col = ElementComponent::Components::Col.new(breakpoints: { nil => 12, lg: 6 })
-      expect(col.render).to eq('<div class="col-12 col-lg-6"></div>')
-    end
-
-    it "renders col-12 col-lg-12 col-md-3" do
-      col = ElementComponent::Components::Col.new(breakpoints: { nil => 12, lg: 12, md: 3 })
-      expect(col.render).to eq('<div class="col-12 col-lg-12 col-md-3"></div>')
-    end
-
-    it "renders col-sm-6 col-md-4 col-lg-3" do
-      col = ElementComponent::Components::Col.new(breakpoints: { sm: 6, md: 4, lg: 3 })
-      expect(col.render).to eq('<div class="col-sm-6 col-md-4 col-lg-3"></div>')
-    end
-
-    it "renders col-md col-lg" do
-      col = ElementComponent::Components::Col.new(breakpoints: { md: nil, lg: nil })
-      expect(col.render).to eq('<div class="col-md col-lg"></div>')
-    end
-  end
-
-  describe "with multiple offsets" do
-    it "renders with multiple offsets" do
-      col = ElementComponent::Components::Col.new(size: 6, offsets: { nil => 3, md: 2 })
-      expect(col.render).to eq('<div class="col-6 offset-3 offset-md-2"></div>')
-    end
-  end
-
-  describe "with multiple orders" do
-    it "renders with multiple orders" do
-      col = ElementComponent::Components::Col.new(size: 6, orders: { nil => 1, md: 2 })
-      expect(col.render).to eq('<div class="col-6 order-1 order-md-2"></div>')
     end
   end
 end

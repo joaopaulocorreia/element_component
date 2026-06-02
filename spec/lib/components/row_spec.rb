@@ -30,6 +30,23 @@ RSpec.describe ElementComponent::Components::Row do
     end
   end
 
+  describe "with cols as hash" do
+    it "renders row-cols-2 row-cols-md-3" do
+      row = ElementComponent::Components::Row.new(cols: { default: 2, md: 3 })
+      expect(row.render).to eq('<div class="row row-cols-2 row-cols-md-3"></div>')
+    end
+
+    it "renders row-cols-2 row-cols-md-3 row-cols-lg-4" do
+      row = ElementComponent::Components::Row.new(cols: { default: 2, md: 3, lg: 4 })
+      expect(row.render).to eq('<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4"></div>')
+    end
+
+    it "renders row-cols-md-3 row-cols-lg-4" do
+      row = ElementComponent::Components::Row.new(cols: { md: 3, lg: 4 })
+      expect(row.render).to eq('<div class="row row-cols-md-3 row-cols-lg-4"></div>')
+    end
+  end
+
   describe "with gutters" do
     it "renders with gutter" do
       row = ElementComponent::Components::Row.new(gutter: 3)
@@ -49,6 +66,23 @@ RSpec.describe ElementComponent::Components::Row do
     it "renders with both gutter_x and gutter_y" do
       row = ElementComponent::Components::Row.new(gutter_x: 2, gutter_y: 3)
       expect(row.render).to eq('<div class="row gx-2 gy-3"></div>')
+    end
+  end
+
+  describe "with gutters as hash" do
+    it "renders with gutter hash" do
+      row = ElementComponent::Components::Row.new(gutter: { default: 2, md: 3 })
+      expect(row.render).to eq('<div class="row g-2 g-md-3"></div>')
+    end
+
+    it "renders with gutter_x hash" do
+      row = ElementComponent::Components::Row.new(gutter_x: { default: 2, md: 3 })
+      expect(row.render).to eq('<div class="row gx-2 gx-md-3"></div>')
+    end
+
+    it "renders with gutter_y hash" do
+      row = ElementComponent::Components::Row.new(gutter_y: { default: 2, md: 3 })
+      expect(row.render).to eq('<div class="row gy-2 gy-md-3"></div>')
     end
   end
 
