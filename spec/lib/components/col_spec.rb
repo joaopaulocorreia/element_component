@@ -120,4 +120,89 @@ RSpec.describe ElementComponent::Components::Col do
       expect(subject.attributes[:class]).to include("col")
     end
   end
+
+  describe "dynamic methods" do
+    describe "#col" do
+      it "adds col after initialization" do
+        col = ElementComponent::Components::Col.new
+        col.col(6)
+        expect(col.render).to eq('<div class="col col-6"></div>')
+      end
+
+      it "adds col with hash" do
+        col = ElementComponent::Components::Col.new
+        col.col(md: 4, lg: 3)
+        expect(col.render).to eq('<div class="col col-md-4 col-lg-3"></div>')
+      end
+
+      it "adds col to existing col" do
+        col = ElementComponent::Components::Col.new(col: 6)
+        col.col(md: 4)
+        expect(col.render).to eq('<div class="col-6 col-md-4"></div>')
+      end
+
+      it "adds col with boolean for auto width" do
+        col = ElementComponent::Components::Col.new
+        col.col(md: true)
+        expect(col.render).to eq('<div class="col col-md"></div>')
+      end
+
+      it "returns self for chaining" do
+        col = ElementComponent::Components::Col.new
+        expect(col.col(6)).to eq(col)
+      end
+    end
+
+    describe "#offset" do
+      it "adds offset after initialization" do
+        col = ElementComponent::Components::Col.new(col: 6)
+        col.offset(3)
+        expect(col.render).to eq('<div class="col-6 offset-3"></div>')
+      end
+
+      it "adds offset with hash" do
+        col = ElementComponent::Components::Col.new(col: 6)
+        col.offset(default: 3, md: 2)
+        expect(col.render).to eq('<div class="col-6 offset-3 offset-md-2"></div>')
+      end
+
+      it "returns self for chaining" do
+        col = ElementComponent::Components::Col.new
+        expect(col.offset(3)).to eq(col)
+      end
+    end
+
+    describe "#order" do
+      it "adds order after initialization" do
+        col = ElementComponent::Components::Col.new(col: 6)
+        col.order(1)
+        expect(col.render).to eq('<div class="col-6 order-1"></div>')
+      end
+
+      it "adds order with hash" do
+        col = ElementComponent::Components::Col.new(col: 6)
+        col.order(default: 1, md: 2)
+        expect(col.render).to eq('<div class="col-6 order-1 order-md-2"></div>')
+      end
+
+      it "returns self for chaining" do
+        col = ElementComponent::Components::Col.new
+        expect(col.order(1)).to eq(col)
+      end
+    end
+
+    describe "chaining" do
+      it "chains multiple methods" do
+        col = ElementComponent::Components::Col.new
+        col.col(6).offset(3).order(1)
+        expect(col.render).to eq('<div class="col col-6 offset-3 order-1"></div>')
+      end
+
+      it "chains with hash values" do
+        col = ElementComponent::Components::Col.new
+        col.col(md: 6).offset(md: 2).order(md: 1)
+        expect(col.render).to eq('<div class="col col-md-6 offset-md-2 order-md-1"></div>')
+      end
+    end
+  end
 end
