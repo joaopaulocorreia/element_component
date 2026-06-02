@@ -18,13 +18,17 @@ module ElementComponent
   Card = Components::Card
   Carousel = Components::Carousel
   CloseButton = Components::CloseButton
+  Col = Components::Col
+  Container = Components::Container
   Dropdown = Components::Dropdown
+  Grid = Components::Grid
   ListGroup = Components::ListGroup
   Modal = Components::Modal
   Nav = Components::Nav
   Navbar = Components::Navbar
   Pagination = Components::Pagination
   Progress = Components::Progress
+  Row = Components::Row
   Spinner = Components::Spinner
   Table = Components::Table
 
@@ -71,13 +75,17 @@ module ElementComponent
     def BreadcrumbList(...) = ElementComponent::BreadcrumbList.new(...)
     def Carousel(...) = ElementComponent::Carousel.new(...)
     def CloseButton(...) = ElementComponent::CloseButton.new(...)
+    def Col(...) = ElementComponent::Col.new(...)
+    def Container(...) = ElementComponent::Container.new(...)
     def Dropdown(...) = ElementComponent::Dropdown.new(...)
+    def Grid(...) = ElementComponent::Grid.new(...)
     def ListGroup(...) = ElementComponent::ListGroup.new(...)
     def Modal(...) = ElementComponent::Modal.new(...)
     def Nav(...) = ElementComponent::Nav.new(...)
     def Navbar(...) = ElementComponent::Navbar.new(...)
     def Pagination(...) = ElementComponent::Pagination.new(...)
     def Progress(...) = ElementComponent::Progress.new(...)
+    def Row(...) = ElementComponent::Row.new(...)
     def Spinner(...) = ElementComponent::Spinner.new(...)
     def Table(...) = ElementComponent::Table.new(...)
     def AlertHeading(...) = ElementComponent::AlertHeading.new(...)
