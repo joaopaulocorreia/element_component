@@ -6,7 +6,7 @@ module ElementComponent
   class Element
     attr_reader :element, :attributes, :contents
 
-    def initialize(element = nil, content = nil, closing_tag: true, wrap: true, **attribute, &block)
+    def initialize(element = nil, content = nil, closing_tag: true, **attribute, &block)
       @element = element
       @closing_tag = closing_tag
       @html = String.new
