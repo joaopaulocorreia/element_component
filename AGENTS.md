@@ -1341,6 +1341,26 @@ Row.new(gutter: { default: 2, md: 3 }) { |r| ... }
 Row.new(gutter_x: 2, gutter_y: 3) { |r| ... }
 ```
 
+#### Dynamic Methods
+Add or modify breakpoints after initialization. All methods return `self` for chaining.
+
+| Method | Parameter | Description |
+|---|---|---|
+| `cols(value)` | Integer/Hash | Add row-cols classes |
+| `gutter(value)` | Integer/Hash | Add gutter classes |
+| `gutter_x(value)` | Integer/Hash | Add horizontal gutter classes |
+| `gutter_y(value)` | Integer/Hash | Add vertical gutter classes |
+
+```ruby
+row = Row.new
+row.cols(2)                    # => row row-cols-2
+row.cols(md: 3, lg: 4)         # => row row-cols-2 row-cols-md-3 row-cols-lg-4
+
+row = Row.new(cols: 2)
+row.gutter(3)                  # => row row-cols-2 g-3
+row.gutter_x(2).gutter_y(3)    # chaining: row gx-2 gy-3
+```
+
 ---
 
 ### Col
@@ -1396,6 +1416,25 @@ Col.new("content", col: { md: true, lg: true })
 Col.new("content", col: 6, offset: 3)
 Col.new("content", col: 6, offset: { default: 3, md: 2 })
 Col.new("content", col: 6, order: { default: 1, md: 2 })
+```
+
+#### Dynamic Methods
+Add or modify breakpoints after initialization. All methods return `self` for chaining.
+
+| Method | Parameter | Description |
+|---|---|---|
+| `col(value)` | Integer/Boolean/Hash | Add column classes |
+| `offset(value)` | Integer/Hash | Add offset classes |
+| `order(value)` | Integer/Hash | Add order classes |
+
+```ruby
+col = Col.new
+col.col(6)                     # => col col-6
+col.col(md: 4, lg: 3)          # => col col-6 col-md-4 col-lg-3
+
+col = Col.new(col: 6)
+col.offset(3)                  # => col-6 offset-3
+col.offset(md: 2).order(1)     # chaining: col-6 offset-3 offset-md-2 order-1
 ```
 
 ---
