@@ -86,4 +86,40 @@ RSpec.describe ElementComponent::Components::Col do
       expect(subject.attributes[:class]).to include("col")
     end
   end
+
+  describe "with multiple breakpoints" do
+    it "renders col-12 col-lg-6" do
+      col = ElementComponent::Components::Col.new(breakpoints: { nil => 12, lg: 6 })
+      expect(col.render).to eq('<div class="col-12 col-lg-6"></div>')
+    end
+
+    it "renders col-12 col-lg-12 col-md-3" do
+      col = ElementComponent::Components::Col.new(breakpoints: { nil => 12, lg: 12, md: 3 })
+      expect(col.render).to eq('<div class="col-12 col-lg-12 col-md-3"></div>')
+    end
+
+    it "renders col-sm-6 col-md-4 col-lg-3" do
+      col = ElementComponent::Components::Col.new(breakpoints: { sm: 6, md: 4, lg: 3 })
+      expect(col.render).to eq('<div class="col-sm-6 col-md-4 col-lg-3"></div>')
+    end
+
+    it "renders col-md col-lg" do
+      col = ElementComponent::Components::Col.new(breakpoints: { md: nil, lg: nil })
+      expect(col.render).to eq('<div class="col-md col-lg"></div>')
+    end
+  end
+
+  describe "with multiple offsets" do
+    it "renders with multiple offsets" do
+      col = ElementComponent::Components::Col.new(size: 6, offsets: { nil => 3, md: 2 })
+      expect(col.render).to eq('<div class="col-6 offset-3 offset-md-2"></div>')
+    end
+  end
+
+  describe "with multiple orders" do
+    it "renders with multiple orders" do
+      col = ElementComponent::Components::Col.new(size: 6, orders: { nil => 1, md: 2 })
+      expect(col.render).to eq('<div class="col-6 order-1 order-md-2"></div>')
+    end
+  end
 end
