@@ -13,21 +13,6 @@ module ElementComponent
         apply_breakpoint_classes("order", order)
       end
 
-      def col(value)
-        apply_col_classes(value)
-        self
-      end
-
-      def offset(value)
-        apply_breakpoint_classes("offset", value)
-        self
-      end
-
-      def order(value)
-        apply_breakpoint_classes("order", value)
-        self
-      end
-
       private
 
       def apply_col_classes(col)
