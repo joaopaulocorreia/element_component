@@ -1251,6 +1251,184 @@ end
 
 ---
 
+### Container
+
+| Property | Value |
+|---|---|
+| Class | `Container` |
+| Tag | `<div>` |
+
+#### Public API
+```ruby
+Container.new(content = nil, fluid: false, breakpoint: nil, **attributes, &)
+```
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fluid` | Boolean | `false` | Adds `.container-fluid` class |
+| `breakpoint` | Symbol | `nil` | `:sm`, `:md`, `:lg`, `:xl`, `:xxl` — adds `.container-{breakpoint}` |
+
+#### HTML Output
+```html
+<div class="container">content</div>
+```
+
+With `fluid: true`:
+```html
+<div class="container-fluid">content</div>
+```
+
+With `breakpoint: :md`:
+```html
+<div class="container-md">content</div>
+```
+
+#### Usage Examples
+```ruby
+Container.new("content")
+Container.new("content", fluid: true)
+Container.new("content", breakpoint: :lg)
+```
+
+---
+
+### Row
+
+| Property | Value |
+|---|---|
+| Class | `Row` |
+| Tag | `<div>` |
+
+#### Public API
+```ruby
+Row.new(content = nil, cols: nil, gutter: nil, gutter_x: nil, gutter_y: nil, **attributes, &)
+```
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `cols` | Integer/Hash | `nil` | Number of columns or hash with breakpoints |
+| `gutter` | Integer/Hash | `nil` | Gutter size or hash with breakpoints |
+| `gutter_x` | Integer/Hash | `nil` | Horizontal gutter or hash with breakpoints |
+| `gutter_y` | Integer/Hash | `nil` | Vertical gutter or hash with breakpoints |
+
+#### Breakpoint Hash Format
+Parameters accept either a simple value or a hash with breakpoints:
+- Simple: `cols: 2` → `row-cols-2`
+- Hash: `cols: { default: 2, md: 3, lg: 4 }` → `row-cols-2 row-cols-md-3 row-cols-lg-4`
+
+#### HTML Output
+```html
+<div class="row">content</div>
+```
+
+With `cols: { default: 2, md: 3 }`:
+```html
+<div class="row row-cols-2 row-cols-md-3">content</div>
+```
+
+With `gutter: { default: 2, md: 3 }`:
+```html
+<div class="row g-2 g-md-3">content</div>
+```
+
+#### Usage Examples
+```ruby
+Row.new { |r| r << Col.new("content") }
+Row.new(cols: 2) { |r| r << Col.new("1"); r << Col.new("2") }
+Row.new(cols: { default: 2, md: 3, lg: 4 }) { |r| ... }
+Row.new(gutter: 3) { |r| ... }
+Row.new(gutter: { default: 2, md: 3 }) { |r| ... }
+Row.new(gutter_x: 2, gutter_y: 3) { |r| ... }
+```
+
+---
+
+### Col
+
+| Property | Value |
+|---|---|
+| Class | `Col` |
+| Tag | `<div>` |
+
+#### Public API
+```ruby
+Col.new(content = nil, col: nil, offset: nil, order: nil, **attributes, &)
+```
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `col` | Integer/Boolean/Hash | `nil` | Column size or hash with breakpoints |
+| `offset` | Integer/Hash | `nil` | Offset value or hash with breakpoints |
+| `order` | Integer/Hash | `nil` | Order value or hash with breakpoints |
+
+#### Breakpoint Hash Format
+Parameters accept either a simple value or a hash with breakpoints:
+- Simple: `col: 6` → `col-6`
+- Hash: `col: { default: 12, md: 6, lg: 4 }` → `col-12 col-md-6 col-lg-4`
+- Boolean: `col: { md: true, lg: true }` → `col-md col-lg` (auto width)
+
+#### HTML Output
+```html
+<div class="col">content</div>
+```
+
+With `col: 6`:
+```html
+<div class="col-6">content</div>
+```
+
+With `col: { default: 12, md: 6, lg: 4 }`:
+```html
+<div class="col-12 col-md-6 col-lg-4">content</div>
+```
+
+With `col: 6, offset: { default: 3, md: 2 }`:
+```html
+<div class="col-6 offset-3 offset-md-2">content</div>
+```
+
+#### Usage Examples
+```ruby
+Col.new("content")
+Col.new("content", col: 6)
+Col.new("content", col: { default: 12, md: 6, lg: 4 })
+Col.new("content", col: { md: true, lg: true })
+Col.new("content", col: 6, offset: 3)
+Col.new("content", col: 6, offset: { default: 3, md: 2 })
+Col.new("content", col: 6, order: { default: 1, md: 2 })
+```
+
+---
+
+### Grid
+
+| Property | Value |
+|---|---|
+| Class | `Grid` |
+| Tag | `<div>` |
+
+#### Public API
+```ruby
+Grid.new(content = nil, **attributes, &)
+```
+
+#### HTML Output
+```html
+<div class="container">content</div>
+```
+
+#### Usage Examples
+```ruby
+Grid.new do |g|
+  g << Row.new do |r|
+    r << Col.new("Column 1", col: 6)
+    r << Col.new("Column 2", col: 6)
+  end
+end
+```
+
+---
+
 ## Element Usage Scenarios
 
 ### Basic Element Creation
