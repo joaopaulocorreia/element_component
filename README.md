@@ -574,6 +574,7 @@ Or push a version tag (e.g., `v0.6.0`) to trigger the automated release workflow
 - [x] Rails Helpers integration
 - [x] Pre-built Bootstrap components (Alert, Badge, Breadcrumb, Button, ButtonGroup, Card, Carousel, CloseButton, Dropdown, ListGroup, Modal, Nav, Navbar, Pagination, Progress, Spinner, Table)
 - [] Add an identifier when adding components using add_content.
+- [] Fix button component. Add attribute type option [ :button, :submit ] on initialize
 
 ## Contributing
 
