@@ -576,6 +576,10 @@ Or push a version tag (e.g., `v0.6.0`) to trigger the automated release workflow
 - [] Add an identifier when adding components using add_content.
 - [] Fix button component. Add attribute type option [ :button, :submit ] on initialize
 
+## Changelog
+
+Notable changes are documented in [CHANGELOG.md](CHANGELOG.md).
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/joaopaulocorreia/element_component.
