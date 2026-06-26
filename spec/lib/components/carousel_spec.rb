@@ -59,6 +59,25 @@ RSpec.describe ElementComponent::Components::Carousel do
       end
     end
 
+    context "with an id that needs escaping" do
+      let(:options) { { id: 'a"b' } }
+
+      it "escapes the id everywhere it is interpolated" do
+        html = subject.render
+        expect(html).to include('id="a&quot;b"')
+        expect(html).to include('data-bs-target="#a&quot;b"')
+        expect(html).not_to include('"#a"b"')
+      end
+    end
+
+    context "with a custom attribute" do
+      let(:options) { { "data-bs-ride": "carousel" } }
+
+      it "forwards the attribute to the outer element" do
+        expect(subject.render).to include('data-bs-ride="carousel"')
+      end
+    end
+
     context "with items" do
       let(:block) do
         proc do |b|
@@ -83,6 +102,39 @@ RSpec.describe ElementComponent::Components::Carousel do
       it "generates indicators for each item" do
         html = subject.render
         expect(html.scan('data-bs-slide-to="').length).to eq(2)
+      end
+    end
+
+    context "when a non-first item is active" do
+      let(:block) do
+        proc do |b|
+          b << ElementComponent::Components::CarouselItem.new { |i| i << "One" }
+          b << ElementComponent::Components::CarouselItem.new(active: true) { |i| i << "Two" }
+        end
+      end
+
+      it "marks exactly one indicator active, matching the active item" do
+        html = subject.render
+        indicators = html[%r{carousel-indicators.*?</div>}m]
+        expect(indicators.scan('class="active"').length).to eq(1)
+        expect(indicators).to include('data-bs-slide-to="1" class="active"')
+        expect(indicators).not_to include('data-bs-slide-to="0" class="active"')
+      end
+    end
+
+    context "when no item is active" do
+      let(:block) do
+        proc do |b|
+          b << ElementComponent::Components::CarouselItem.new { |i| i << "One" }
+          b << ElementComponent::Components::CarouselItem.new { |i| i << "Two" }
+        end
+      end
+
+      it "falls back to marking the first indicator active" do
+        html = subject.render
+        indicators = html[%r{carousel-indicators.*?</div>}m]
+        expect(indicators.scan('class="active"').length).to eq(1)
+        expect(indicators).to include('data-bs-slide-to="0" class="active"')
       end
     end
   end

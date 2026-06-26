@@ -6,69 +6,70 @@ require_relative "carousel/caption"
 module ElementComponent
   module Components
     class Carousel < Element
-      def initialize(content = nil, id: "carousel", fade: false, indicators: true, controls: true, **attributes, &block)
+      def initialize(content = nil, id: "carousel", fade: false, indicators: true, controls: true, **attributes, &)
         @carousel_id = id
         @show_indicators = indicators
         @show_controls = controls
 
-        super("div", &block)
+        super("div", content, **attributes, &)
 
         add_attribute(id: id)
         add_attribute(class: "carousel")
         add_attribute(class: "slide")
         add_attribute(class: "carousel-fade") if fade
-        add_attribute(attributes) unless attributes.empty?
-        add_content(content) if content
       end
 
       private
 
-      def indicator_button(index, active)
-        target = "data-bs-target=\"##{@carousel_id}\""
-        slide = "data-bs-slide-to=\"#{index}\""
-        active_attr = ' class="active" aria-current="true"' if active
-        "<button type=\"button\" #{target} #{slide}#{active_attr}></button>"
+      def carousel_items
+        @contents.grep(CarouselItem)
       end
 
-      def build_indicators
-        html = +""
-        items = @contents.flat_map do |c|
-          if c.is_a?(Proc)
-            (buf = []
-             c.call(buf)
-             buf)
-          else
-            [c]
-          end
+      def active_index
+        carousel_items.index { |item| item.attributes[:class]&.include?("active") } || 0
+      end
+
+      def indicator_button(index, active)
+        attributes = {
+          type: "button",
+          "data-bs-target": "##{@carousel_id}",
+          "data-bs-slide-to": index.to_s
+        }
+        if active
+          attributes[:class] = "active"
+          attributes[:"aria-current"] = "true"
         end
-        items = items.grep(CarouselItem)
-        items.each_with_index do |item, index|
-          active = item.attributes[:class]&.include?("active") || index.zero?
-          html << indicator_button(index, active)
-        end
-        html
+
+        new_element("button", **attributes)
       end
 
       def control_button(direction, label)
-        target = "data-bs-target=\"##{@carousel_id}\""
-        slide = "data-bs-slide=\"#{direction}\""
-        "<button class=\"carousel-control-#{direction}\" type=\"button\" #{target} #{slide}>" \
-          "<span class=\"carousel-control-#{direction}-icon\" aria-hidden=\"true\"></span>" \
-          "<span class=\"visually-hidden\">#{label}</span></button>"
+        new_element("button", class: "carousel-control-#{direction}", type: "button",
+                              "data-bs-target": "##{@carousel_id}", "data-bs-slide": direction) do |btn|
+          btn << new_element("span", class: "carousel-control-#{direction}-icon", "aria-hidden": "true")
+          btn << new_element("span", label, class: "visually-hidden")
+        end
+      end
+
+      def render_indicators
+        active = active_index
+        wrapper = new_element("div", class: "carousel-indicators")
+        carousel_items.each_index { |index| wrapper << indicator_button(index, index == active) }
+        wrapper.render_in(@view_context)
+      end
+
+      def render_inner
+        new_element("div", contents, class: "carousel-inner").render_in(@view_context)
       end
 
       def build
         @html << opening_tag
-
-        @html << "<div class=\"carousel-indicators\">#{build_indicators}</div>" if @show_indicators
-
-        @html << "<div class=\"carousel-inner\">"
-        @html << mount_content(contents)
-        @html << "</div>"
+        @html << render_indicators if @show_indicators
+        @html << render_inner
 
         if @show_controls
-          @html << control_button("prev", "Previous")
-          @html << control_button("next", "Next")
+          @html << control_button("prev", "Previous").render_in(@view_context)
+          @html << control_button("next", "Next").render_in(@view_context)
         end
 
         @html << closing_tag
