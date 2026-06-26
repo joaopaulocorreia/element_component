@@ -13,12 +13,6 @@ module ElementComponent
         apply_breakpoint_classes("row-gap", row_gap)
         apply_breakpoint_classes("column-gap", column_gap)
       end
-
-      private
-
-      def apply_breakpoint_classes(prefix, value)
-        breakpoint_classes(prefix, value).each { |klass| add_attribute(class: klass) }
-      end
     end
   end
 end

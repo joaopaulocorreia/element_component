@@ -17,6 +17,17 @@ RSpec.describe ElementComponent::Components::Table do
     end
   end
 
+  describe "option validation" do
+    it "raises ArgumentError for an invalid variant" do
+      expect { ElementComponent::Components::Table.new(variant: :neon) }
+        .to raise_error(ArgumentError, /Invalid variant/)
+    end
+
+    it "allows a nil variant" do
+      expect { ElementComponent::Components::Table.new(variant: nil) }.not_to raise_error
+    end
+  end
+
   describe "with all options" do
     it "renders with all options" do
       table = ElementComponent::Components::Table.new(

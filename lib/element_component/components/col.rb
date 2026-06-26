@@ -22,10 +22,6 @@ module ElementComponent
           breakpoint_classes("col", col).each { |klass| add_attribute(class: klass) }
         end
       end
-
-      def apply_breakpoint_classes(prefix, value)
-        breakpoint_classes(prefix, value).each { |klass| add_attribute(class: klass) }
-      end
     end
   end
 end

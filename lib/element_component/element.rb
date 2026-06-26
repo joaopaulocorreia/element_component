@@ -83,7 +83,10 @@ module ElementComponent
     end
 
     def render
-      return @cached_html if @cache_enabled && @cached_html
+      if @cache_enabled
+        cached = read_cache
+        return finalize(cached) if cached
+      end
 
       template if respond_to? "template"
 
@@ -99,9 +102,9 @@ module ElementComponent
 
       after_render(@html) if respond_to? "after_render"
 
-      cache_store!
+      write_cache if @cache_enabled
 
-      defined?(ActiveSupport::SafeBuffer) ? @html.html_safe : SafeString.new(@html)
+      finalize(@html)
     end
 
     def render_in(view_context)
@@ -128,6 +131,13 @@ module ElementComponent
     end
 
     private
+
+    def validate_option!(value, allowed, name)
+      return if value.nil? || allowed.include?(value)
+
+      raise ArgumentError,
+            "Invalid #{name}: #{value.inspect}. Valid options: #{allowed.map(&:inspect).join(", ")}"
+    end
 
     def build
       @html << opening_tag if @element
@@ -175,15 +185,30 @@ module ElementComponent
       CGI.escapeHTML(value.to_s)
     end
 
-    def cache_store!
-      return unless @cache_enabled
+    def finalize(html)
+      defined?(ActiveSupport::SafeBuffer) ? html.html_safe : SafeString.new(html)
+    end
 
-      key = @cache_key || hash
-      if defined?(Rails.cache)
-        Rails.cache.fetch(key, expires_in: @cache_expires_in) { @html }
-      else
-        @cached_html = @html
-      end
+    def read_cache
+      return @cached_html if @cached_html
+      return unless rails_cache?
+
+      cached = Rails.cache.read(cache_key)
+      @cached_html = cached if cached
+      cached
+    end
+
+    def write_cache
+      @cached_html = @html
+      Rails.cache.write(cache_key, @html, expires_in: @cache_expires_in) if rails_cache?
+    end
+
+    def cache_key
+      @cache_key || hash
+    end
+
+    def rails_cache?
+      defined?(Rails) && Rails.respond_to?(:cache) && Rails.cache
     end
 
     def resolve_attribute_values(value, attr)

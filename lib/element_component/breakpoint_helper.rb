@@ -16,6 +16,10 @@ module ElementComponent
 
     private
 
+    def apply_breakpoint_classes(prefix, value)
+      breakpoint_classes(prefix, value).each { |klass| add_attribute(class: klass) }
+    end
+
     def build_class(prefix, breakpoint, value)
       return build_single_class(prefix, value) if breakpoint == :default
 

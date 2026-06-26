@@ -57,6 +57,17 @@ RSpec.describe ElementComponent::Components::Container do
     end
   end
 
+  describe "option validation" do
+    it "raises ArgumentError for an invalid breakpoint" do
+      expect { ElementComponent::Components::Container.new(breakpoint: :phone) }
+        .to raise_error(ArgumentError, /Invalid breakpoint/)
+    end
+
+    it "allows a nil breakpoint" do
+      expect { ElementComponent::Components::Container.new(breakpoint: nil) }.not_to raise_error
+    end
+  end
+
   describe "with block content" do
     subject do
       ElementComponent::Components::Container.new do |c|

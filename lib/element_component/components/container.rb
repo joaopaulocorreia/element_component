@@ -3,14 +3,16 @@
 module ElementComponent
   module Components
     class Container < Element
-      VALID_BREAKPOINTS = %i[sm md lg xl xxl].freeze
+      include BreakpointHelper
 
       def initialize(content = nil, fluid: false, breakpoint: nil, **attributes, &)
+        validate_option!(breakpoint, VALID_BREAKPOINTS, "breakpoint")
+
         super("div", content, **attributes, &)
 
         if fluid
           add_attribute(class: "container-fluid")
-        elsif breakpoint && VALID_BREAKPOINTS.include?(breakpoint)
+        elsif breakpoint
           add_attribute(class: "container-#{breakpoint}")
         else
           add_attribute(class: "container")

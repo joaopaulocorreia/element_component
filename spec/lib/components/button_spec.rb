@@ -78,6 +78,22 @@ RSpec.describe ElementComponent::Components::Button do
     end
   end
 
+  describe "option validation" do
+    it "raises ArgumentError for an invalid variant" do
+      expect { ElementComponent::Components::Button.new(variant: :ourple) }
+        .to raise_error(ArgumentError, /Invalid variant/)
+    end
+
+    it "raises ArgumentError for an invalid size" do
+      expect { ElementComponent::Components::Button.new(size: :huge) }
+        .to raise_error(ArgumentError, /Invalid size/)
+    end
+
+    it "allows a nil size" do
+      expect { ElementComponent::Components::Button.new(size: nil) }.not_to raise_error
+    end
+  end
+
   ElementComponent::Components::Button::VALID_VARIANTS.each do |variant|
     it "renders button btn-#{variant}" do
       btn = ElementComponent::Components::Button.new(variant: variant)

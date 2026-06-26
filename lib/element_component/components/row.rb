@@ -14,12 +14,6 @@ module ElementComponent
         apply_breakpoint_classes("gx", gutter_x)
         apply_breakpoint_classes("gy", gutter_y)
       end
-
-      private
-
-      def apply_breakpoint_classes(prefix, value)
-        breakpoint_classes(prefix, value).each { |klass| add_attribute(class: klass) }
-      end
     end
   end
 end

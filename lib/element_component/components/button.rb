@@ -7,6 +7,9 @@ module ElementComponent
       VALID_SIZES = %i[sm lg].freeze
 
       def initialize(content = nil, variant: :primary, type: :button, outline: false, size: nil, href: nil, **attributes, &)
+        validate_option!(variant, VALID_VARIANTS, "variant")
+        validate_option!(size, VALID_SIZES, "size")
+
         if href
           super("a", content, **attributes, &)
           add_attribute(href:)

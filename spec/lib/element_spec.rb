@@ -217,4 +217,74 @@ RSpec.describe ElementComponent::Element do
       it { expect(subject.render).to eq("<br>") }
     end
   end
+
+  describe "Caching" do
+    let(:counting_class) do
+      Class.new(ElementComponent::Element) do
+        attr_reader :build_count
+
+        def before_render
+          @build_count = (@build_count || 0) + 1
+        end
+      end
+    end
+
+    context "in-memory cache" do
+      it "builds only once across multiple renders" do
+        el = counting_class.new("div", "content").cache
+        el.render
+        el.render
+        expect(el.build_count).to eq(1)
+      end
+
+      it "serves cached html even when contents change after caching" do
+        el = ElementComponent::Element.new("div", "first").cache
+        first = el.render
+        el.add_content("second")
+
+        expect(el.render).to eq(first)
+        expect(el.render).not_to include("second")
+      end
+
+      it "rebuilds after expire_cache!" do
+        el = counting_class.new("div", "content").cache
+        el.render
+        el.expire_cache!.cache
+        el.render
+
+        expect(el.build_count).to eq(2)
+      end
+    end
+
+    context "with Rails.cache available" do
+      let(:store) { {} }
+      let(:rails_cache) do
+        cache = double("Rails.cache")
+        allow(cache).to receive(:read) { |key| store[key] }
+        allow(cache).to receive(:write) { |key, value, **| store[key] = value }
+        cache
+      end
+
+      before { stub_const("Rails", double("Rails", cache: rails_cache)) }
+
+      it "writes rendered html to Rails.cache under the given key" do
+        ElementComponent::Element.new("div", "content").cache("my-key").render
+
+        expect(store["my-key"]).to eq("<div>content</div>")
+      end
+
+      it "reads back from Rails.cache on a fresh instance (no rebuild)" do
+        store["my-key"] = "<div>cached</div>"
+        el = counting_class.new("div", "fresh").cache("my-key")
+
+        expect(el.render).to eq("<div>cached</div>")
+        expect(el.build_count).to be_nil
+      end
+
+      it "passes expires_in through to Rails.cache" do
+        expect(rails_cache).to receive(:write).with("k", anything, expires_in: 300)
+        ElementComponent::Element.new("div", "x").cache("k", expires_in: 300).render
+      end
+    end
+  end
 end

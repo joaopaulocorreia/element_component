@@ -20,6 +20,42 @@ RSpec.describe ElementComponent::Components::Dropdown do
       end
     end
 
+    context "with an invalid direction" do
+      let(:options) { { direction: :sideways } }
+
+      it "raises ArgumentError" do
+        expect { subject }.to raise_error(ArgumentError, /Invalid direction/)
+      end
+    end
+
+    context "with content and attributes" do
+      let(:options) { { id: "menu-1" } }
+
+      it "forwards content and attributes to the element" do
+        dropdown = described_class.new("Label", id: "menu-1")
+        html = dropdown.render
+        expect(html).to include('id="menu-1"')
+        expect(html).to include("Label")
+      end
+    end
+
+    context "with a toggle button" do
+      it "renders a standard toggle button" do
+        html = described_class.new.toggle_button(label: "Menu", variant: :primary).render
+        expect(html).to include("dropdown-toggle")
+        expect(html).to include("btn-primary")
+        expect(html).to include('data-bs-toggle="dropdown"')
+        expect(html).to include("Menu")
+      end
+
+      it "renders a split toggle button" do
+        html = described_class.new.toggle_button(label: "Menu", split: true).render
+        expect(html).to include("dropdown-toggle-split")
+        expect(html).to include("visually-hidden")
+        expect(html).to include("btn-group")
+      end
+    end
+
     context "with menu and items" do
       let(:block) do
         proc do |b|
