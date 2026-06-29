@@ -9,5 +9,5 @@ gem "debug", ">= 1.0.0"
 gem "irb"
 gem "rake", "~> 13.4"
 gem "rspec", "~> 3.13"
-gem "rubocop", "~> 1.86"
+gem "rubocop", "~> 1.88"
 gem "simplecov", "~> 0.22", require: false
